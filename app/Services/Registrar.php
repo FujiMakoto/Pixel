@@ -1,6 +1,6 @@
-<?php namespace App\Services;
+<?php namespace Pixel\Services;
 
-use App\User;
+use Pixel\User;
 use Validator;
 use Illuminate\Contracts\Auth\Registrar as RegistrarContract;
 

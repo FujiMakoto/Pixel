@@ -1,5 +1,5 @@
 suites:
     main:
-        namespace: App
-        psr4_prefix: App
+        namespace: Pixel
+        psr4_prefix: Pixel
         src_path: app
