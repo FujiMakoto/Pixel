@@ -6256,65 +6256,6 @@ label,
   background: linear-gradient(135deg, #009696 10%, #390e7a 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#390e7a 100%', endColorstr='#009696 10%', GradientType=0);
 }
-/*#header.aqua {
-  .header-background("aqua.jpg");
-}
-
-#header.baby-blue {
-  .header-background("baby-blue.jpg");
-}
-
-#header.black {
-  .header-background("black.jpg");
-}
-
-#header.blue-green {
-  .header-background("blue-green.jpg");
-}
-
-#header.color-splash {
-  .header-background("color-splash.jpg");
-}
-
-#header.deep-green {
-  .header-background("deep-green.jpg");
-}
-
-#header.flower {
-  .header-background("flower.jpg");
-}
-
-#header.green {
-  .header-background("green.jpg");
-}
-
-#header.indigo {
-  .header-background("indigo.jpg");
-}
-
-#header.mango {
-  .header-background("mango.jpg");
-}
-
-#header.mint {
-  .header-background("mint.jpg");
-}
-
-#header.ocean {
-  .header-background("ocean.jpg");
-}
-
-#header.purple {
-  .header-background("purple.jpg");
-}
-
-#header.silver {
-  .header-background("silver.jpg");
-}
-
-#header.water {
-  .header-background("water.jpg");
-}*/
 .footer {
   position: absolute;
   bottom: 0;
