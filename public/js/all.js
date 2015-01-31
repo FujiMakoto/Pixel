@@ -1724,6 +1724,7 @@ imagePreview = $('img#preview');
 
 imageInput.fileinput({
     uploadUrl: upload_path,
+    uploadExtraData: {"_token": csrf_token},
     browseIcon: '<i class="fa fa-folder-open"></i> ',
     layoutTemplates: {
         icon: '<span class="fa fa-picture-o kv-caption-icon"></span> '
