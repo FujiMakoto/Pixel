@@ -1,0 +1,9 @@
+.gradient(@direction: 135deg, @start: #009696 10%, @stop: #390E7A 100%, @color: #390E7A) {
+  background: @color;
+  background: -webkit-linear-gradient(@direction - 180, @start, @stop);
+  background: -moz-linear-gradient(@direction - 180, @start, @stop);
+  background: -ms-linear-gradient(@direction - 180, @start, @stop);
+  background: -o-linear-gradient(@direction - 180, @start, @stop);
+  background: linear-gradient(@direction, @start, @stop);
+  filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",@stop,@start));
+}
