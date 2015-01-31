@@ -1,0 +1,22 @@
+#header {
+  position: relative;
+  height: @header-height;
+  box-shadow: 0px 5px 5px -5px rgba(63, 63, 63, 0.8) inset, 0px -5px 5px -5px rgba(63, 63, 63, 0.8) inset;
+  width: 100%;
+  color: @header-color;
+  text-align: center;
+}
+
+#header:after {
+  content: "";
+  background: url("@{images-url}/@{header-gradient-texture}") repeat;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+}
+
+#header.ocean {
+  .gradient(135deg, #009696 10%, #390E7A 100%, #390E7A);
+}

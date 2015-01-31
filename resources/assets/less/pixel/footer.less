@@ -1,0 +1,118 @@
+//
+// Footers
+// --------------------------------------------------
+
+// Wrapper and base class
+//
+// Provide a sticky footer from which we expand to create full-width, fixed, and
+// other navbar variations.
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: @footer-height;
+
+  // Prevent floats from breaking the navbar
+  &:extend(.clearfix all);
+}
+
+.container,
+.container-fluid {
+  > .footer-header,
+  > .footer-collapse {
+    margin-right: -@footer-padding-horizontal;
+    margin-left:  -@footer-padding-horizontal;
+
+    @media (min-width: @grid-float-breakpoint) {
+      margin-right: 0;
+      margin-left:  0;
+    }
+  }
+}
+
+// Alternate footers
+// --------------------------------------------------
+
+// Default footer
+.navbar-default {
+  background-color: @footer-default-bg;
+  border-color: @footer-default-border;
+
+  .footer-text {
+    color: @footer-default-color;
+    padding: @footer-padding-vertical @footer-padding-horizontal;
+    margin: 0 !important;
+  }
+
+
+  // Links in footers
+  //
+  // Add a class to ensure links outside the footer nav are colored correctly.
+
+  .footer-link {
+    color: @footer-default-link-color;
+    &:hover {
+      color: @footer-default-link-hover-color;
+    }
+  }
+
+  .btn-link {
+    color: @navbar-default-link-color;
+    &:hover,
+    &:focus {
+      color: @navbar-default-link-hover-color;
+    }
+    &[disabled],
+    fieldset[disabled] & {
+      &:hover,
+      &:focus {
+        color: @navbar-default-link-disabled-color;
+      }
+    }
+  }
+}
+
+// Inverse footer
+.footer-inverse {
+  background-color: @footer-inverse-bg;
+  border-color: @footer-inverse-border;
+
+  .footer-text {
+    color: @footer-inverse-color;
+    padding: @footer-padding-vertical @footer-padding-horizontal;
+    margin: 0 !important;
+  }
+
+  .footer-link {
+    color: @footer-inverse-link-color;
+    &:hover {
+      color: @footer-inverse-link-hover-color;
+    }
+  }
+
+  .btn-link {
+    color: @footer-inverse-link-color;
+    &:hover,
+    &:focus {
+      color: @footer-inverse-link-hover-color;
+    }
+    &[disabled],
+    fieldset[disabled] & {
+      &:hover,
+      &:focus {
+        color: @footer-inverse-link-disabled-color;
+      }
+    }
+  }
+}
+
+// HTML / body styling tweaks
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: @footer-height;
+}
