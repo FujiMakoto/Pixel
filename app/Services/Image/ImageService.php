@@ -4,6 +4,7 @@ use Pixel\Contracts\Image\ImageContract as ImageContract;
 use Pixel\Contracts\Image\Repository as RepositoryContract;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Carbon\Carbon;
+use Pixel\Contracts\Image\Repository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use ColorThief\ColorThief;
 
@@ -124,7 +125,7 @@ abstract class ImageService implements ImageContract {
     public function create(UploadedFile $file, array $params = [])
     {
         $imageData     = $this->getImageData($file);
-        $dominantColor = $this->getImageDominantColor($file);
+        $dominantColor = $this->getImageDominantColor( $file->getRealPath() );
 
         // Set some additional fields
         $params['sid']             = str_random('7');
@@ -145,8 +146,7 @@ abstract class ImageService implements ImageContract {
         # copies of the same file and keeps an organized and human readable filesystem heirarchy.
 
         // Make sure our filesystem path exists
-        $createdAt = $image->created_at;
-        $path = "images/{$createdAt->year}/{$createdAt->month}/{$createdAt->day}/";
+        $path = $image->getBasePath();
         if ( ! $this->filesystem->exists($path) )
             $this->filesystem->makeDirectory($path);
 
@@ -154,6 +154,9 @@ abstract class ImageService implements ImageContract {
         $filename     = "{$image->md5sum}.{$image->type}";
         $fileContents = file_get_contents( $file->getRealPath() );
         $this->filesystem->put($path.$filename, $fileContents);
+
+        // Create the scaled (preview/thumbnail) versions of our new image
+        $this->createScaledImages($image);
 
         // Return our image collection
         return $image;
@@ -192,28 +195,19 @@ abstract class ImageService implements ImageContract {
     }
 
     /**
-     * Get information about an image file
-     *
-     * @param UploadedFile $file
-     *
-     * @return array
-     */
-    abstract public function getImageData(UploadedFile $file);
-
-    /**
      * Get the dominant color used in an image
      *
-     * @param UploadedFile $file
+     * @param string $filePath
      *
      * @return array|bool
      */
-    public function getImageDominantColor(UploadedFile $file)
+    public function getImageDominantColor($filePath)
     {
         // Set up an instance of Color Thief
         $colorThief = new ColorThief();
-        $pallet = $colorThief->getColor($file->getRealPath(), 8);
+        $pallet = $colorThief->getColor($filePath, 8);
 
-        // Successful result, set the color pallet
+        // Successful result, return the color pallet
         if ( isset($pallet[0], $pallet[1], $pallet[2]) ) {
             return [
                 'red'   => $pallet[0],
@@ -229,5 +223,23 @@ abstract class ImageService implements ImageContract {
             'blue'  => null
         ];
     }
+
+    /**
+     * Create scaled versions of an image resource
+     *
+     * @param Repository $image
+     *
+     * @return mixed
+     */
+    abstract public function createScaledImages(Repository $image);
+
+    /**
+     * Get information about an uploaded image file
+     *
+     * @param UploadedFile $file
+     *
+     * @return array
+     */
+    abstract protected function getImageData(UploadedFile $file);
 
 }

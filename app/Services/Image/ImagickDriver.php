@@ -1,5 +1,6 @@
 <?php namespace Pixel\Services\Image;
 
+use Pixel\Contracts\Image\Repository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ImagickDriver extends ImageService {
@@ -31,15 +32,35 @@ class ImagickDriver extends ImageService {
     }
 
     /**
+     * Create scaled versions of an image resource
+     *
+     * @param Repository $image
+     *
+     * @return boolean
+     */
+    public function createScaledImages(Repository $image)
+    {
+        // Create the preview image
+        $previewConfig = config('pixel.scaling.preview');
+        $this->scaleImage($image::PREVIEW, $previewConfig, $image);
+
+        // Create the thumbnail image
+        $thumbnailConfig = config('pixel.scaling.thumbnail');
+        $this->scaleImage($image::THUMBNAIL, $thumbnailConfig, $image);
+
+        return true;
+    }
+
+    /**
      * Get information about an image file
      *
      * @param UploadedFile $file
      *
      * @return array
      */
-    public function getImageData(UploadedFile $file)
+    protected function getImageData(UploadedFile $file)
     {
-        // Get the file match and create a new Imagick instance
+        // Get the file path and create a new Imagick instance
         $filePath = $file->getRealPath();
         $imagick  = new \Imagick($filePath);
 
@@ -69,6 +90,68 @@ class ImagickDriver extends ImageService {
         }
 
         return $data;
+    }
+
+    /**
+     * Perform scaling on an image
+     *
+     * @param string     $scale
+     * @param array      $config
+     * @param Repository $image
+     *
+     * @return bool
+     */
+    private function scaleImage($scale, $config, Repository $image)
+    {
+        // Make sure our configuration is valid
+        if ( ! isset($config['quality'], $config['width'], $config['height']) ) {
+            return false;
+        }
+
+        // Is the image already smaller than what we're trying to scale it to?
+        if ( ($image->width <= $config['width']) && ($image->height <= $config['height']) ) {
+            return false;
+        }
+
+        // Get the file contents
+        $filePath     = $image->getRealPath($image::ORIGINAL);
+        $fileContents = $this->filesystem->get($filePath);
+
+        // Instantiate a new Imagick instance
+        $imagick = new \Imagick();
+        $imagick->readImageBlob($fileContents);
+
+        // Get and make sure our base filesystem path exists
+        $scalePath = $image->getBasePath($scale);
+        if ( ! $this->filesystem->exists($scalePath) )
+            $this->filesystem->makeDirectory($scalePath);
+
+        // Are we encoding the preview in JPEG format?
+        $scaleType = $image->type;
+        if ( ($scaleType == self::JPEG) || ! $config['preserve_format'] ) {
+            $scaleType = self::JPEG;
+            $imagick->setImageFormat('jpeg');
+            $imagick->setImageCompressionQuality($config['quality']);
+        }
+
+        // Define the default Imagick parameters
+        $imagick->setImageInterlaceScheme(\Imagick::INTERLACE_PLANE);
+        $imagick->setSamplingFactors([1,1,1]);
+
+        // Scale or crop the image
+        if ($config['method'] == 'scale') {
+            $imagick->scaleImage($config['width'], $config['height'], true);
+        } else {
+            $imagick->cropThumbnailImage($config['width'], $config['height']);
+        }
+
+        // Save our scaled image to the filesystem
+        $scaleName = $image->md5sum.'.'.$scaleType;
+        $status = $this->filesystem->put($scalePath.$scaleName, $imagick->getImageBlob()); // @todo: throw exception
+
+        // Clean up and return
+        $imagick->clear();
+        return $status;
     }
 
 

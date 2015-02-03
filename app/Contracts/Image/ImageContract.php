@@ -110,19 +110,19 @@ interface ImageContract {
     public function delete($image);
 
     /**
-     * Get information about an image file
-     *
-     * @param UploadedFile $image
-     *
-     * @return array
-     */
-    public function getImageData(UploadedFile $image);
-
-    /**
      * Get the dominant color used in an image
      *
-     * @param UploadedFile $file
+     * @param string $filePath
      */
-    public function getImageDominantColor(UploadedFile $file);
+    public function getImageDominantColor($filePath);
+
+    /**
+     * Create scaled versions of an image resource
+     *
+     * @param Repository $image
+     *
+     * @return mixed
+     */
+    public function createScaledImages(Repository $image);
 
 }
