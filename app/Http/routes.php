@@ -11,11 +11,57 @@
 |
 */
 
-Route::get('/', 'WelcomeController@index');
+//Route::get('/', 'WelcomeController@index');
 
-Route::get('home', 'HomeController@index');
+Route::get('/', [
+	'as'   => 'home',
+	'uses' => 'ImageController@create'
+]);
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
+]);
+
+// Image Resources
+Route::group(['prefix' => 'images'], function ()
+{
+	Route::pattern('sid', '[0-9A-Za-z]{7}');
+
+	Route::get('/', [
+		'as'   => 'images.index',
+		'uses' => 'ImageController@index'
+	]);
+
+	Route::get('create', [
+		'as'   => 'images.create',
+		'uses' => 'ImageController@create'
+	]);
+	Route::post('/', [
+		'as'   => 'images.store',
+		'uses' => 'ImageController@store'
+	]);
+
+	Route::get('{sid}', [
+		'as'    => 'images.show',
+		'uses'  => 'ImageController@show'
+	]);
+
+	Route::get('{sid}/edit', [
+		'as'   => 'images.edit',
+		'uses' => 'ImageController@edit'
+	]);
+	Route::put('{sid}', [
+		'as'   => 'images.update',
+		'uses' => 'ImageController@update'
+	]);
+
+	Route::delete('{sid}', [
+		'as'   => 'images.destroy',
+		'uses' => 'ImageController@destroy'
+	]);
+});
+
+Route::post('upload', [
+	'as' => 'upload'
 ]);
