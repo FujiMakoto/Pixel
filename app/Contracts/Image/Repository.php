@@ -5,6 +5,13 @@ use Pixel\Services\Image\Collection;
 interface Repository {
 
     /**
+     * Scale constants
+     */
+    const ORIGINAL  = null;
+    const PREVIEW   = 'previews/';
+    const THUMBNAIL = 'thumbnails/';
+
+    /**
      * Retrieve an image by its string identifier
      *
      * @param $sid
@@ -93,5 +100,23 @@ interface Repository {
      * @return mixed
      */
     public function delete($id);
+
+    /**
+     * Get the absolute system path to an image
+     *
+     * @param string $scale
+     *
+     * @return string
+     */
+    public function getRealPath($scale);
+
+    /**
+     * Get the base path to this image resource
+     *
+     * @param null|string $scale
+     *
+     * @return bool|string
+     */
+    public function getBasePath($scale = null);
 
 }

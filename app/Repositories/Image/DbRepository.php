@@ -1,5 +1,6 @@
 <?php namespace Pixel\Repositories\Image;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\Paginator;
 use Pixel\Contracts\Image\Repository as RepositoryContract;
@@ -48,7 +49,15 @@ class DbRepository extends Repository implements RepositoryContract {
      */
     public function getByUser($user)
     {
-        // @todo: Implement getByUser() method
+        // @todo: Replace with User repository
+        $collection = new Collection();
+        $userId     = ($user instanceof \Pixel\User) ? $user->id : intval($user);
+        $images     = ImageModel::whereUserId($userId)->get();
+
+        foreach ($images as $image)
+            $collection->add( new static($image->toArray()) );
+
+        return $collection;
     }
 
     /**
@@ -60,7 +69,15 @@ class DbRepository extends Repository implements RepositoryContract {
      */
     public function getByAlbum($album)
     {
-        // @todo: Implement getByAlbum() method
+        // @todo: Replace with Album repository
+        $collection = new Collection();
+        $albumId    = ($album instanceof self) ? $album->id : intval($album);
+        $images     = ImageModel::whereUserId($albumId)->get();
+
+        foreach ($images as $image)
+            $collection->add( new static($image->toArray()) );
+
+        return $collection;
     }
 
     /**
@@ -103,6 +120,8 @@ class DbRepository extends Repository implements RepositoryContract {
     {
         $image = ImageModel::create($input)->toArray();
         $this->fill($image);
+
+        return $this;
     }
 
     /**
@@ -160,6 +179,48 @@ class DbRepository extends Repository implements RepositoryContract {
         $image->forceDelete();
 
         return true;
+    }
+
+    /**
+     * Get the absolute path to an image
+     *
+     * @param null|string $scale
+     *
+     * @return string
+     */
+    public function getRealPath($scale = null)
+    {
+        $basePath = $this->getBasePath();
+        $md5sum   = $this->attributes['md5sum'];
+        $type     = $this->attributes['type'];
+
+        switch ($scale) {
+            case self::PREVIEW:
+                return $basePath . self::PREVIEW   . $md5sum . '.'.$type;
+
+            case self::THUMBNAIL:
+                return $basePath . self::THUMBNAIL . $md5sum . '.'.$type;
+
+            default:
+                return $basePath . self::ORIGINAL  . $md5sum . '.'.$type;
+        }
+    }
+
+    /**
+     * Get the base path to this image resource
+     *
+     * @param null|string $scale
+     *
+     * @return bool|string
+     */
+    public function getBasePath($scale = null)
+    {
+        if ( isset($this->attributes['created_at']) ) {
+            $createdAt = $this->asDateTime($this->attributes['created_at']);
+            return "images/{$createdAt->year}/{$createdAt->month}/{$createdAt->day}/{$scale}";
+        }
+
+        return false;
     }
 
 }
