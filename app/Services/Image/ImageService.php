@@ -1,12 +1,15 @@
 <?php namespace Pixel\Services\Image;
 
+use Illuminate\Contracts\Filesystem\Cloud;
 use Pixel\Contracts\Image\ImageContract as ImageContract;
 use Pixel\Contracts\Image\Repository as RepositoryContract;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Carbon\Carbon;
 use Pixel\Contracts\Image\Repository;
+use Pixel\Exceptions\Image\UnsupportedFilesystemException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use ColorThief\ColorThief;
+use SplFileObject;
 
 /**
  * Class ImageService
@@ -222,6 +225,42 @@ abstract class ImageService implements ImageContract {
             'green' => null,
             'blue'  => null
         ];
+    }
+
+    /**
+     * Generate a download response for the specified image
+     *
+     * @param Repository  $image
+     * @param string|null $scale
+     * @param string      $disposition
+     *
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws UnsupportedFilesystemException
+     */
+    public function downloadResponse(Repository $image, $scale = null, $disposition = 'inline')
+    {
+        $fileSystem = config('filesystems.default');
+        // @todo: Sendfile response
+
+        // Standard filesystem response
+        if ( $fileSystem == 'local' ) {
+            $filePath   = config('filesystems.disks.local.root').'/'.$image->getRealPath($scale);
+            $fileObject = new SplFileObject($filePath);
+            return response()->download($fileObject, $image->name, [], $disposition);
+        }
+
+        // Amazon S3 response
+        if ( $fileSystem == 's3' ) {
+            // Generate a URL to the image on our S3 bucket
+            $bucket   = config('filesystems.disks.s3.bucket');
+            $filePath = $image->getRealPath($scale);
+            $imageUrl = "https://s3.amazonaws.com/{$bucket}/{$filePath}";
+
+            // Return a temporary redirect
+            return response()->redirectTo($imageUrl);
+        }
+
+        throw new UnsupportedFilesystemException("{$fileSystem} is not a supported Filesystem");
     }
 
     /**

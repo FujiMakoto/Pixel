@@ -110,6 +110,18 @@ interface ImageContract {
     public function delete($image);
 
     /**
+     * Generate a download response for the specified image
+     *
+     * @param Repository  $image
+     * @param string|null $scale
+     * @param string      $disposition
+     *
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws UnsupportedFilesystemException
+     */
+    public function downloadResponse(Repository $image, $scale = null, $disposition = 'inline');
+
+    /**
      * Get the dominant color used in an image
      *
      * @param string $filePath

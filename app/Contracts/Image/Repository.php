@@ -104,11 +104,11 @@ interface Repository {
     /**
      * Get the absolute system path to an image
      *
-     * @param string $scale
+     * @param null|string $scale
      *
      * @return string
      */
-    public function getRealPath($scale);
+    public function getRealPath($scale = null);
 
     /**
      * Get the base path to this image resource
