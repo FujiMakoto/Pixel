@@ -46,6 +46,11 @@ Route::group(['prefix' => 'images'], function ()
 		'as'    => 'images.show',
 		'uses'  => 'ImageController@show'
 	]);
+	Route::get('{sidFile}', [
+		'as'   => 'images.download',
+		'uses' => 'ImageController@download'
+	])
+	->where(['sidFile' => '[0-9A-Za-z]{7}\\.[a-z]{3,4}']);
 
 	Route::get('{sid}/edit', [
 		'as'   => 'images.edit',
@@ -61,6 +66,12 @@ Route::group(['prefix' => 'images'], function ()
 		'uses' => 'ImageController@destroy'
 	]);
 });
+
+Route::get('/i/{sidFile}', [
+	'as'   => 'images.shortDownload',
+	'uses' => 'ImageController@download'
+])
+	 ->where(['sidFile' => '[0-9A-Za-z]{7}\\.[a-z]{3,4}']);
 
 Route::post('upload', [
 	'as' => 'upload'

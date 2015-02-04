@@ -57,17 +57,56 @@ class ImageController extends Controller {
 	 * Display the specified resource.
 	 * GET /images/{sid}
 	 *
-	 * @param ImageContract $image
+	 * @param ImageContract $imageService
 	 * @param  string       $sid
 	 *
 	 * @return Response
 	 */
-	public function show(ImageContract $image, $sid)
+	public function show(ImageContract $imageService, $sid)
 	{
-		$image = $image->get($sid);
+		$image = $imageService->get($sid);
 		//dd($image);
 
+		//return $imageService->downloadResponse($image, $image::PREVIEW);
+
 		return view('images/show')->withImage($image);
+	}
+
+	public function download(ImageContract $imageService, Request $request, $sidFile)
+	{
+		// Split the filename and extension
+		$sid  = preg_replace('/\\.[^.\\s]{3,4}$/', '', $sidFile);
+		$requestType = substr(strrchr($sidFile, "."), 1);
+
+		// Retrieve the requested image
+		$image = $imageService->get($sid);
+
+		// What size image are we requesting?
+		switch ( $request->get('size') ) {
+			case 'preview':
+				$scale = $image::PREVIEW;
+				break;
+
+			case 'thumbnail':
+				$scale = $image::THUMBNAIL;
+				break;
+
+			default:
+				$scale = $image::ORIGINAL;
+		}
+
+		// Make sure our requested type matches (@todo: this is very kludgy)
+		$imagePath = $image->getRealPath($scale);
+		$imageType = substr(strrchr($imagePath, "."), 1);
+
+		if ($imageType != $requestType) {
+			return response()->redirectToRoute('images.download', [
+				'size'    => $request->get('size'),
+				'sidFile' => $sid.'.'.$imageType
+			])->setStatusCode(301);
+		}
+
+		return $imageService->downloadResponse($image, $scale);
 	}
 
 	/**
