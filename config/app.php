@@ -135,6 +135,13 @@ return [
 		'Illuminate\Translation\TranslationServiceProvider',
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
+		'Illuminate\Html\HtmlServiceProvider',
+
+		/*
+		 * Third Party Service Providers...
+		 */
+		//'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
+		//'Intervention\Image\ImageServiceProvider',
 
 		/*
 		 * Application Service Providers...
@@ -144,6 +151,8 @@ return [
 		'Pixel\Providers\ConfigServiceProvider',
 		'Pixel\Providers\EventServiceProvider',
 		'Pixel\Providers\RouteServiceProvider',
+		'Pixel\Providers\Image\ImageServiceProvider',
+		'Pixel\Providers\Image\BackendServiceProvider'
 
 	],
 
@@ -190,6 +199,10 @@ return [
 		'URL'       => 'Illuminate\Support\Facades\URL',
 		'Validator' => 'Illuminate\Support\Facades\Validator',
 		'View'      => 'Illuminate\Support\Facades\View',
+		'HTML'      => 'Illuminate\Html\HtmlFacade',
+		'Form'      => 'Illuminate\Html\FormFacade',
+
+		'Image'     => 'Pixel\Facades\Image'
 
 	],
 
