@@ -5,7 +5,11 @@
         {{-- Image Preview --}}
         <div class="preview-container">
             <div class="image-preview">
-                {!! HTML::image(route('images.download', ['size' => 'preview', 'sidFile' => $image->sid.'.'.$image->type]), $image->name, ['id' => 'preview']) !!}
+                {!! HTML::image(route('images.download', [
+                    'size' => 'preview',
+                    'sidFile' => $image->getSidFilename($image::PREVIEW)]),
+                    $image->name,
+                    ['id' => 'preview']) !!}
             </div>
         </div>
 
@@ -13,3 +17,17 @@
         @include('images/_partials/details')
     </div>
 @stop
+
+{{-- Handle Delete Requests --}}
+@if ( ! empty($deleteKey) )
+    @section('scripts')
+        <script>
+            $(window).load(function() {
+                deleteResource({
+                    deleteUrl: "{{ route('images.destroy', ['sid' => $image->sid]) }}",
+                    deleteKey: "{{ $deleteKey }}"
+                })
+            });
+        </script>
+    @stop
+@endif

@@ -59,7 +59,7 @@ abstract class ImageService implements ImageContract {
      *
      * @param string $sid
      *
-     * @return mixed
+     * @return Repository
      */
     public function get($sid)
     {
@@ -188,13 +188,32 @@ abstract class ImageService implements ImageContract {
     /**
      * Delete an image
      *
-     * @param $image
+     * @param Repository|int $image
      *
-     * @return mixed
+     * @return bool
      */
     public function delete($image)
     {
-        // TODO: Implement delete() method.
+        // Make sure $image is a Repository instance
+        if ( ! $image instanceof Repository)
+            $image = $this->get($image);
+
+        // Set our filesystem paths
+        $paths['original']  = $image->getRealPath($image::ORIGINAL);
+        $paths['preview']   = $image->getRealPath($image::PREVIEW);
+        $paths['thumbnail'] = $image->getRealPath($image::THUMBNAIL);
+
+        // Loop through our paths and delete the files
+        foreach ($paths as $path) {
+            if ( $this->filesystem->exists($path) )
+                $this->filesystem->delete($path);
+        }
+
+        // Delete the image from our backend
+        $image->delete($image->id);
+
+        // Return success
+        return true;
     }
 
     /**

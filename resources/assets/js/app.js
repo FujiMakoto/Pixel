@@ -100,3 +100,71 @@ $(".copy-on-dblclick").dblclick( function() {
     var copyEvent = new ClipboardEvent('copy', { dataType: 'text/plain', data: $(this).val() } );
     document.dispatchEvent(copyEvent);
 });
+
+// Delete a specified resource
+function deleteResource(options) {
+
+    // Options
+    options = options || {};
+    var warningTitle = options.warningTitle || 'Are you sure?';
+    var warningText  = options.warningText  || 'This image will be permanently deleted. There\'s no undoing this!';
+    var successTitle = options.successTitle || 'Deleted!';
+    var successText  = options.successText  || 'Your image has been successfully deleted.';
+    var deleteUrl    = options.deleteUrl    || document.URL;
+    var deleteKey    = options.deleteKey    || null;
+
+    // Function to send the AJAX DELETE request
+    var deleteRequest = function() {
+        var data = {"_token": csrf_token};
+
+        // Do we have a delete key to pass with our request?
+        if (deleteKey) {
+            data.deleteKey = deleteKey;
+        }
+
+        $.ajax({
+            url: deleteUrl,
+            data: data,
+            type: 'DELETE',
+            success: function() {
+                $(".sweet-alert.visible :button").attr('disabled', false);
+                swal({
+                    title: successTitle,
+                    text: successText,
+                    type: "success",
+                    closeOnConfirm: false
+                }, function() {
+                    window.location.href = home_path;
+                })
+            },
+            error: function() {
+                $(".sweet-alert.visible :button").attr('disabled', false);
+                swal({
+                    title: 'Error',
+                    text: 'An unknown error occurred while processing your request',
+                    type: "error",
+                    confirmButtonClass: 'btn-danger',
+                    confirmButtonText: 'Dammit',
+                    closeOnConfirm: false
+                }, function() {
+                    window.location.reload();
+                })
+            }
+        })
+    };
+
+    // Prompt the user for confirmation
+    swal({
+        title: warningTitle,
+        text: warningText,
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, delete it!",
+        closeOnConfirm: false
+    }, function() {
+        $(".sweet-alert.visible :button").attr('disabled', true);
+        deleteRequest();
+    });
+
+}

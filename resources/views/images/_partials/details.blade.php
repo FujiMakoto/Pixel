@@ -11,14 +11,16 @@
         <input class="form-control select-on-focus copy-on-dblclick" readonly type="text"
                value="{{ route('images.shortDownload', ['sidFile' => $image->getSidFilename()]) }}">
     </div>
-    <hr>
 
-    <div class="input-group">
-        <span class="input-group-addon"><i class="fa fa-trash-o fa-fw"></i></span>
-        <input class="form-control select-on-focus reveal-on-focus copy-on-dblclick" type="text" readonly
-               value="Click to reveal the image deletion link"
-               data-reveal-text="{{ route('images.delete', ['sid' => $image->sid, 'deleteKey' => $image->delete_key]) }}">
-    </div>
+    @if ($canEdit)
+        <hr>
+        <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-trash-o fa-fw"></i></span>
+            <input class="form-control select-on-focus reveal-on-focus copy-on-dblclick" readonly type="text"
+                   value="Click to reveal the image deletion link"
+                   data-reveal-text="{{ route('images.delete', ['sid' => $image->sid, 'deleteKey' => $image->delete_key]) }}">
+        </div>
+    @endif
 </div>
 
 {{-- Image Details --}}

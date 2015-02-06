@@ -169,16 +169,13 @@ class DbRepository extends Repository implements RepositoryContract {
     /**
      * Permanently delete an image
      *
-     * @param $id
+     * @param int $id
      *
-     * @return mixed
+     * @return bool
      */
     public function delete($id)
     {
-        $image = $this->getById($id);
-        $image->forceDelete();
-
-        return true;
+        return ImageModel::destroy($id);
     }
 
     /**

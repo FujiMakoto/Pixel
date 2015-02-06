@@ -89,8 +89,12 @@
 	<script>
 		var csrf_token  = "{{ csrf_token() }}";
 		var upload_path = "@yield('upload_path', Request::url())";
+		var home_path   = "{{ route('home') }}";
 	</script>
 
 	<script src="{{ elixir("js/all.js") }}"></script>
+
+	@yield('scripts')
+
 </body>
 </html>
