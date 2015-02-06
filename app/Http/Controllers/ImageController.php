@@ -88,20 +88,19 @@ class ImageController extends Controller {
 	/**
 	 * Process an image download request
 	 *
-	 * @param ImageContract $imageService
 	 * @param Request       $request
 	 * @param               $sidFile
 	 *
 	 * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Symfony\Component\HttpFoundation\Response
 	 */
-	public function download(ImageContract $imageService, Request $request, $sidFile)
+	public function download(Request $request, $sidFile)
 	{
 		// Split the filename and extension
-		$sid  = preg_replace('/\\.[^.\\s]{3,4}$/', '', $sidFile);
+		$sid = preg_replace('/\\.[^.\\s]{3,4}$/', '', $sidFile);
 		$requestType = substr(strrchr($sidFile, "."), 1);
 
 		// Retrieve the requested image
-		$image = $imageService->get($sid);
+		$image = $this->imageService->get($sid);
 
 		// What size image are we requesting?
 		switch ( $request->get('size') ) {
@@ -117,9 +116,8 @@ class ImageController extends Controller {
 				$scale = $image::ORIGINAL;
 		}
 
-		// Make sure our requested type matches (@todo: this is very kludgy)
-		$imagePath = $image->getRealPath($scale);
-		$imageType = substr(strrchr($imagePath, "."), 1);
+		// Make sure our requested type matches
+		$imageType = $image->getType($scale);
 
 		if ($imageType != $requestType) {
 			return response()->redirectToRoute('images.download', [
@@ -128,7 +126,7 @@ class ImageController extends Controller {
 			])->setStatusCode(301);
 		}
 
-		return $imageService->downloadResponse($image, $scale);
+		return $this->imageService->downloadResponse($image, $scale);
 	}
 
 	/**
