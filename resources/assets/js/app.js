@@ -84,6 +84,12 @@ function readURL(input) {
 
 }
 
+// Reveal hidden input text on focus
+$(".reveal-on-focus").focus(function() {
+    $(this).val( $(this).data('reveal-text') );
+    $(this).removeClass('reveal-on-focus');
+});
+
 // Select input text on focus
 $(".select-on-focus").focus(function() {
     this.select();
