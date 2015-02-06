@@ -216,6 +216,49 @@ class DbRepository extends Repository implements RepositoryContract {
     }
 
     /**
+     * Get the file type for this image resource
+     *
+     * @param null|string $scale
+     *
+     * @return string
+     */
+    public function getType($scale = null)
+    {
+        $type = $this->attributes['type'];
+
+        switch ($scale) {
+            case self::PREVIEW:
+                return config('pixel.scaling.preview.preserve_format')
+                    ? $type
+                    : 'jpg';
+
+            case self::THUMBNAIL:
+                return config('pixel.scaling.thumbnail.preserve_format')
+                    ? $type
+                    : 'jpg';
+
+            default:
+                return $type;
+        }
+    }
+
+    /**
+     * Get the pseudo string identifier filename for HTTP requests
+     *
+     * @param null $scale
+     *
+     * @return string
+     */
+    public function getSidFilename($scale = null)
+    {
+        // Get the string identifier and type attributes
+        $sid  = $this->attributes['md5sum'];
+        $type = $this->getType($scale);
+
+        return $sid.'.'.$type;
+    }
+
+    /**
      * Get the absolute path to an image
      *
      * @param null|string $scale
@@ -226,7 +269,7 @@ class DbRepository extends Repository implements RepositoryContract {
     {
         $basePath = $this->getBasePath();
         $md5sum   = $this->attributes['md5sum'];
-        $type     = $this->attributes['type'];
+        $type     = $this->getType($scale);
 
         // Define the width / height attributes
         $imageWidth      = $this->attributes['width'];
@@ -239,23 +282,19 @@ class DbRepository extends Repository implements RepositoryContract {
         // Return the preview image only if our original has a scaled preview
         if ($scale == self::PREVIEW)
         {
-            if ( ($imageWidth > $previewWidth) && ($imageHeight > $previewHeight) ) {
-                $type = config('pixel.scaling.preview.preserve_format') ? $type : 'jpg';
-                return $basePath . self::PREVIEW . $md5sum . '.'.$type;
-            }
+            if ( ($imageWidth > $previewWidth) && ($imageHeight > $previewHeight) )
+                return $basePath . self::PREVIEW . $md5sum.'.'.$type;
         };
 
         // Return the thumbnail image only if our original has a scaled thumbnail
         if ($scale == self::THUMBNAIL)
         {
-            if ( ($imageWidth > $thumbnailWidth) && ($imageHeight > $thumbnailHeight) ) {
-                $type = config('pixel.scaling.thumbnail.preserve_format') ? $type : 'jpg';
-                return $basePath . self::THUMBNAIL . $md5sum . '.'.$type;
-            }
+            if ( ($imageWidth > $thumbnailWidth) && ($imageHeight > $thumbnailHeight) )
+                return $basePath . self::THUMBNAIL . $md5sum.'.'.$type;
         };
 
         // Return the original image
-        return $basePath . self::ORIGINAL  . $md5sum . '.'.$type;
+        return $basePath . self::ORIGINAL  . $md5sum.'.'.$type;
     }
 
     /**
