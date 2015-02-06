@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Laravel</title>
 
-	<link href="/css/app.css" rel="stylesheet">
+	<link href="{{ elixir("css/all.css") }}" rel="stylesheet">
 
 	<!-- Fonts -->
 	<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
@@ -19,8 +19,9 @@
 	<![endif]-->
 </head>
 <body>
-	<nav class="navbar navbar-default">
+	<nav class="navbar navbar-inverse">
 		<div class="container-fluid">
+			{{-- Navigation --}}
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
 					<span class="sr-only">Toggle Navigation</span>
@@ -50,13 +51,46 @@
 					@endif
 				</ul>
 			</div>
+			{{-- /Navigation --}}
 		</div>
+		{{-- Header --}}
+		<div id="header" class="ocean">
+			<div class="container">
+				<div class="row">
+
+					<div style="margin-top: 35px;" class="col-md-12">
+						<h4>Single Image Uploader</h4>
+					</div>
+
+					<div class="col-md-12 subtext">
+						<span>Want to create an album instead?</span>
+						<a href="sign-up.html">Click here</a>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		{{-- /Header --}}
 	</nav>
 
 	@yield('content')
 
-	<!-- Scripts -->
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
+	{{-- Footer --}}
+	<footer class="footer footer-inverse">
+		<div class="container-fluid">
+			<p class="footer-text">Place sticky footer content here.</p>
+		</div>
+	</footer>
+
+	{{-- Scripts --}}
+	<!--<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>-->
+	<!--<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>-->
+
+	<script>
+		var csrf_token  = "{{ csrf_token() }}";
+		var upload_path = "@yield('upload_path', Request::url())";
+	</script>
+
+	<script src="{{ elixir("js/all.js") }}"></script>
 </body>
 </html>
