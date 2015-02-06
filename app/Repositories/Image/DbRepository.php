@@ -252,7 +252,7 @@ class DbRepository extends Repository implements RepositoryContract {
     public function getSidFilename($scale = null)
     {
         // Get the string identifier and type attributes
-        $sid  = $this->attributes['md5sum'];
+        $sid  = $this->attributes['sid'];
         $type = $this->getType($scale);
 
         return $sid.'.'.$type;
