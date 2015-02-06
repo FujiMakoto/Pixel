@@ -94,3 +94,9 @@ $(".reveal-on-focus").focus(function() {
 $(".select-on-focus").focus(function() {
     this.select();
 });
+
+// Copy input text on double click (This does not currently work)
+$(".copy-on-dblclick").dblclick( function() {
+    var copyEvent = new ClipboardEvent('copy', { dataType: 'text/plain', data: $(this).val() } );
+    document.dispatchEvent(copyEvent);
+});
