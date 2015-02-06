@@ -8,14 +8,13 @@
 		"laravel/framework": "~5.0",
 		"illuminate/html": "5.0.*@dev",
 		"danmichaelo/coma": "*",
-		"barryvdh/laravel-ide-helper": "~1.11@dev",
-
-		"kartik-v/bootstrap-fileinput": "dev-master",
-		"components/font-awesome": "4.3.*@dev"
+	  	"ksubileau/color-thief-php": "~1.1"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.0",
-		"phpspec/phpspec": "~2.1"
+		"phpspec/phpspec": "~2.1",
+		"mockery/mockery": "0.9.*@dev",
+		"league/flysystem-aws-s3-v2": "~1.0"
 	},
 	"autoload": {
 		"classmap": [
