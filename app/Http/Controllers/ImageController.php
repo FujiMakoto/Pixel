@@ -1,10 +1,12 @@
 <?php namespace Pixel\Http\Controllers;
 
+use Illuminate\Session\SessionInterface;
 use Pixel\Contracts\Image\ImageContract;
 use Pixel\Http\Requests;
 use Pixel\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use Session;
 use Pixel\Services\Image\ImageService;
 
 class ImageController extends Controller {
@@ -17,7 +19,7 @@ class ImageController extends Controller {
 	/**
 	 * Constructor
 	 *
-	 * @param ImageContract $imageService
+	 * @param ImageContract    $imageService
 	 */
 	public function __construct(ImageContract $imageService)
 	{
@@ -51,7 +53,7 @@ class ImageController extends Controller {
 	 * Store a newly created resource in storage.
 	 * POST /images
 	 *
-	 * @param Request       $request
+	 * @param Request $request
 	 *
 	 * @return Response
 	 */
@@ -59,6 +61,10 @@ class ImageController extends Controller {
 	{
 		// Create the image
 		$image = $this->imageService->create( $request->file('image') );
+
+		// If we're a guest, set an ownership flag in our session
+		if ( \Auth::guest() )
+			Session::push('owned_images', $image->id);
 
 		// Redirect to the newly created image resource
 		if ( $request->ajax() )
@@ -80,9 +86,19 @@ class ImageController extends Controller {
 		$image = $this->imageService->get($sid);
 		//dd($image);
 
+		// Can we edit this image?
+		$canEdit = false;
+		$guestOwnsImage = in_array( $image->id, Session::get('owned_images', []) );
+
+		if ($guestOwnsImage)
+			$canEdit = true;
+
 		//return $imageService->downloadResponse($image, $image::PREVIEW);
 
-		return view('images/show')->withImage($image);
+		return view('images/show')->with([
+			'image'   => $image,
+			'canEdit' => $canEdit
+		]);
 	}
 
 	/**
@@ -173,12 +189,31 @@ class ImageController extends Controller {
 	 * Remove the specified resource from storage.
 	 * DELETE /images/{sid}
 	 *
-	 * @param  string  $sid
+	 * @param string $sid
+	 * @param Request $request
+	 *
 	 * @return Response
 	 */
-	public function destroy($sid)
+	public function destroy($sid, Request $request)
 	{
-		//
+		// Fetch our requested resource
+		$image = $this->imageService->get($sid);
+
+		// Was this image uploaded by a guest?
+		if ($image->user_id == 0) {
+			// Did we receive a valid delete key with our request?
+			if ( $request->has('deleteKey') && ($request->get('deleteKey') == $image->delete_key) ) {
+				// Delete the image and return success
+				$this->imageService->delete($image);
+
+				if ( $request->ajax() )
+					return response()->json(['success' => true]);
+
+				return response()->redirectToRoute('home');
+			} else {
+				return \App::abort(403);
+			}
+		}
 	}
 
 	/**
