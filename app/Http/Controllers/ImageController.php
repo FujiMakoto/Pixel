@@ -10,6 +10,21 @@ use Pixel\Services\Image\ImageService;
 class ImageController extends Controller {
 
 	/**
+	 * @var ImageContract
+	 */
+	protected $imageService;
+
+	/**
+	 * Constructor
+	 *
+	 * @param ImageContract $imageService
+	 */
+	public function __construct(ImageContract $imageService)
+	{
+		$this->imageService = $imageService;
+	}
+
+	/**
 	 * Display a listing of the resource.
 	 * (This is just a placeholder, a public listing is still under consideration)
 	 * GET /images
@@ -36,15 +51,14 @@ class ImageController extends Controller {
 	 * Store a newly created resource in storage.
 	 * POST /images
 	 *
-	 * @param ImageContract $image
 	 * @param Request       $request
 	 *
 	 * @return Response
 	 */
-	public function store(ImageContract $image, Request $request)
+	public function store(Request $request)
 	{
 		// Create the image
-		$image = $image->create( $request->file('image') );
+		$image = $this->imageService->create( $request->file('image') );
 
 		// Redirect to the newly created image resource
 		if ( $request->ajax() )
@@ -57,14 +71,13 @@ class ImageController extends Controller {
 	 * Display the specified resource.
 	 * GET /images/{sid}
 	 *
-	 * @param ImageContract $imageService
 	 * @param  string       $sid
 	 *
 	 * @return Response
 	 */
-	public function show(ImageContract $imageService, $sid)
+	public function show($sid)
 	{
-		$image = $imageService->get($sid);
+		$image = $this->imageService->get($sid);
 		//dd($image);
 
 		//return $imageService->downloadResponse($image, $image::PREVIEW);
@@ -72,6 +85,15 @@ class ImageController extends Controller {
 		return view('images/show')->withImage($image);
 	}
 
+	/**
+	 * Process an image download request
+	 *
+	 * @param ImageContract $imageService
+	 * @param Request       $request
+	 * @param               $sidFile
+	 *
+	 * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Symfony\Component\HttpFoundation\Response
+	 */
 	public function download(ImageContract $imageService, Request $request, $sidFile)
 	{
 		// Split the filename and extension
@@ -131,6 +153,22 @@ class ImageController extends Controller {
 	public function update($sid)
 	{
 		//
+	}
+
+	/**
+	 * Display the image deletion confirmation page
+	 * GET /images/{sid}/delete/{deleteKey}
+	 *
+	 * @param $sid
+	 * @param $deleteKey
+	 *
+	 * @return Response
+	 */
+	public function delete($sid, $deleteKey)
+	{
+		// Set the deleteKey and return the default images.show page
+		view()->share('deleteKey', $deleteKey);
+		return $this->show($sid);
 	}
 
 	/**
