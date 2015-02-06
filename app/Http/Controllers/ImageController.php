@@ -18,7 +18,7 @@ class ImageController extends Controller {
 	 */
 	public function index()
 	{
-		return \Redirect::route('home');
+		return response()->redirectToRoute('home');
 	}
 
 	/**
@@ -143,6 +143,18 @@ class ImageController extends Controller {
 	public function destroy($sid)
 	{
 		//
+	}
+
+	/**
+	 * Redirect short image URL's
+	 *
+	 * @param string $sid
+	 *
+	 * @return Response
+	 */
+	public function redirectShort($sid)
+	{
+		return response()->redirectToRoute('images.show', ['sid' => $sid], 301);
 	}
 
 }
