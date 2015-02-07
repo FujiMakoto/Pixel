@@ -1,5 +1,6 @@
 <?php namespace Pixel\Http\Controllers;
 
+use Pixel\Http\Requests\ImageUploadRequest;
 use Illuminate\Session\SessionInterface;
 use Pixel\Contracts\Image\ImageContract;
 use Pixel\Http\Requests;
@@ -53,11 +54,11 @@ class ImageController extends Controller {
 	 * Store a newly created resource in storage.
 	 * POST /images
 	 *
-	 * @param Request $request
+	 * @param ImageUploadRequest $request
 	 *
 	 * @return Response
 	 */
-	public function store(Request $request)
+	public function store(ImageUploadRequest $request)
 	{
 		// Create the image
 		$image = $this->imageService->create( $request->file('image') );
@@ -143,30 +144,6 @@ class ImageController extends Controller {
 		}
 
 		return $this->imageService->downloadResponse($image, $scale);
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 * GET /images/{sid}/edit
-	 *
-	 * @param  string  $sid
-	 * @return Response
-	 */
-	public function edit($sid)
-	{
-		//
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 * PUT /images/{sid}
-	 *
-	 * @param  string  $sid
-	 * @return Response
-	 */
-	public function update($sid)
-	{
-		//
 	}
 
 	/**
