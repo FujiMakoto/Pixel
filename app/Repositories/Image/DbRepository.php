@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\Paginator;
 use Pixel\Contracts\Image\Repository as RepositoryContract;
+use Pixel\Exceptions\Image\ImageNotFoundException;
 use Pixel\Repositories\Repository;
 use Pixel\Repositories\Collection;
 use Pixel\Image as ImageModel;
@@ -21,11 +22,16 @@ class DbRepository extends Repository implements RepositoryContract {
      *
      * @param $sid
      *
-     * @return Collection
+     * @return this
+     * @throws ImageNotFoundException
      */
     public function getBySid($sid)
     {
-        $image = ImageModel::whereSid($sid)->firstOrFail()->toArray();
+        try {
+            $image = ImageModel::whereSid($sid)->firstOrFail()->toArray();
+        } catch (ModelNotFoundException $e) {
+            throw new ImageNotFoundException($e->getMessage(), $e->getCode());
+        }
         $this->fill($image);
 
         return $this;
@@ -36,11 +42,16 @@ class DbRepository extends Repository implements RepositoryContract {
      *
      * @param $id
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return this
+     * @throws ImageNotFoundException
      */
     public function getById($id)
     {
-        $image = ImageModel::findOrFail($id)->toArray();
+        try {
+            $image = ImageModel::findOrFail($id)->toArray();
+        } catch (ModelNotFoundException $e) {
+            throw new ImageNotFoundException($e->getMessage(), $e->getCode());
+        }
         $this->fill($image);
 
         return $this;
@@ -95,6 +106,7 @@ class DbRepository extends Repository implements RepositoryContract {
      * @param bool $withInvisible
      *
      * @return mixed
+     * @throws ImageNotFoundException
      */
     public function recent($page = 1, $perPage = 12, $withExpired = false, $withInvisible = false)
     {
@@ -102,6 +114,10 @@ class DbRepository extends Repository implements RepositoryContract {
         $collection = new Collection();
         $offset     = $perPage * abs(($page - 1));
         $images     = ImageModel::orderBy('created_at', 'desc')->skip($offset)->take($perPage)->get();
+
+        // Did we get any results?
+        if ( ! $images->count() )
+            throw new ImageNotFoundException('No recent images found');
 
         foreach ($images as $image)
             $collection->add( new static($image->toArray()) );
@@ -118,9 +134,9 @@ class DbRepository extends Repository implements RepositoryContract {
     /**
      * Create a new image record
      *
-     * @param $input
+     * @param array $input
      *
-     * @return mixed
+     * @return this
      */
     public function create($input)
     {
@@ -134,6 +150,7 @@ class DbRepository extends Repository implements RepositoryContract {
      * Update an image resource
      *
      * @return bool
+     * @throws ImageNotFoundException
      */
     public function save()
     {
@@ -141,7 +158,7 @@ class DbRepository extends Repository implements RepositoryContract {
             ImageModel::findOrFail($this->attributes['id'])->update($this->attributes);
             return true;
         } catch (ModelNotFoundException $e) {
-            return false;
+            throw new ImageNotFoundException($e->getMessage(), $e->getCode());
         }
     }
 
