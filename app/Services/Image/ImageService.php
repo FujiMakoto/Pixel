@@ -6,6 +6,7 @@ use Pixel\Contracts\Image\Repository as RepositoryContract;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Carbon\Carbon;
 use Pixel\Contracts\Image\Repository;
+use Pixel\Exceptions\Image\ImageNotFoundException;
 use Pixel\Exceptions\Image\UnsupportedFilesystemException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use ColorThief\ColorThief;
@@ -48,10 +49,13 @@ abstract class ImageService implements ImageContract {
      */
     public function exists($sid)
     {
-        if ( $this->imageRepo->getBySid($sid) )
-            return true;
+        try {
+            $this->imageRepo->getBySid($sid);
+        } catch (ImageNotFoundException $e) {
+            return false;
+        }
 
-        return false;
+        return true;
     }
 
     /**
@@ -140,6 +144,11 @@ abstract class ImageService implements ImageContract {
 
         // Concatenate our parameters
         $params = array_merge($imageData, $dominantColor, $params);
+
+        // Make sure an image with this string identifier doesn't exist already
+        while ($this->exists($params['sid'])) {
+            $params['sid'] = str_random('7');
+        }
 
         // Create the image in our repository
         $image = $this->imageRepo->create($params);
