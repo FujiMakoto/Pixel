@@ -75,24 +75,6 @@ interface Repository {
     public function save();
 
     /**
-     * Remove the soft-delete flag on an image record
-     *
-     * @param $id
-     *
-     * @return mixed
-     */
-    public function approve($id);
-
-    /**
-     * Unapprove (soft-delete) an image record
-     *
-     * @param $id
-     *
-     * @return mixed
-     */
-    public function unapprove($id);
-
-    /**
      * Permanently delete an image
      *
      * @param $id
