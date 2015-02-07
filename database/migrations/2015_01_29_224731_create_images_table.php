@@ -47,7 +47,6 @@ class CreateImagesTable extends Migration {
 			// Timestamps
 			$table->timestamps();                                  // standard timestamps
 			$table->timestamp('expires')->nullable();              // image expiration date (for temp uploads)
-			$table->softDeletes();                                 // used for "un-approving"/hiding images
 
 		});
 	}

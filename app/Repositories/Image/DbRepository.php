@@ -163,33 +163,6 @@ class DbRepository extends Repository implements RepositoryContract {
     }
 
     /**
-     * Remove the soft-delete flag on an image record
-     *
-     * @param $id
-     *
-     * @return mixed
-     */
-    public function approve($id)
-    {
-        $image = $this->getById($id);
-        $image->restore();
-
-        return true;
-    }
-
-    /**
-     * Unapprove (soft-delete) an image record
-     *
-     * @param $id
-     *
-     * @return boolean
-     */
-    public function unapprove($id)
-    {
-        return ImageModel::destroy($id);
-    }
-
-    /**
      * Permanently delete an image
      *
      * @param int $id
