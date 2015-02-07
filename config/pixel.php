@@ -4,10 +4,28 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Upload Settings
+    |--------------------------------------------------------------------------
+    |
+    | Defines the validation rules enforced for image uploads.
+    |
+    | max_size is the maximum allowed filesize in kilobytes
+    |
+    */
+
+    'upload' => [
+
+        'max_size' => 10000,
+        'mimes'    => ['jpeg', 'png', 'gif']
+
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Image Scaling
     |--------------------------------------------------------------------------
     |
-    | Each uploaded image will have two scaled copies generated for it.
+    | Each uploaded image will by default have two scaled copies generated for it.
     | A preview image, which is displayed on the images.show view, and a
     | thumbnail, which is used on album and other directory views.
     |
@@ -17,7 +35,7 @@ return [
     | The preserve format setting will allow uploaded PNG / GIF images to be scaled while
     | keeping their native upload format. Disabling these settings will cause scaled images
     | to be converted to JPEG format instead.
-    |   WARNING: Please re-generate scales if changing this setting on a production website.
+    |   WARNING: Please re-generate images if changing this setting on a production website.
     |
     */
 
