@@ -4,6 +4,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Default Image Driver
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify which of the image drivers you wish to use when
+    | processing image manipulation tasks within the application.
+    |
+    | By default support is offered for Imagick and Gd, with Imagick being the
+    | recommended default.
+    |
+    */
+
+    'driver' => 'imagick',
+
+    /*
+    |--------------------------------------------------------------------------
     | Upload Settings
     |--------------------------------------------------------------------------
     |
