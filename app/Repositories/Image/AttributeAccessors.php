@@ -84,6 +84,16 @@ trait AttributeAccessors {
     }
 
     /**
+     * Get the color scheme for this image
+     *
+     * @return string
+     */
+    public function getColorScheme()
+    {
+        return \ColorScheme::getClosest($this)->name;
+    }
+
+    /**
      * Get the absolute path to an image
      *
      * @param null|string $scale
