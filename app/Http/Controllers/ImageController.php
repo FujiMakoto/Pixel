@@ -145,22 +145,6 @@ class ImageController extends Controller {
 	}
 
 	/**
-	 * Display the confirmation page for image deletion
-	 * GET /images/{sid}/delete/{deleteKey}
-	 *
-	 * @param $sid
-	 * @param $deleteKey
-	 *
-	 * @return Response
-	 */
-	public function delete($sid, $deleteKey)
-	{
-		// Set the deleteKey and return the default show method
-		view()->share('deleteKey', $deleteKey);
-		return $this->show($sid);
-	}
-
-	/**
 	 * Remove the specified image
 	 * DELETE /images/{sid}
 	 *
@@ -186,6 +170,9 @@ class ImageController extends Controller {
 
 				return response()->redirectToRoute('home');
 			} else {
+				if ( $request->ajax() )
+					return response()->json('Invalid delete key provided', 403);
+
 				return \App::abort(403);
 			}
 		}

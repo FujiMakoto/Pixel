@@ -147,11 +147,11 @@ function deleteResource(options) {
                     window.location.href = home_path;
                 })
             },
-            error: function() {
+            error: function(jqXHR, textStatus, errorThrown) {
                 $(".sweet-alert.visible :button").attr('disabled', false);
                 swal({
                     title: 'Error',
-                    text: 'An unknown error occurred while processing your request',
+                    text: jqXHR.responseJSON || 'An unknown error occurred while processing your request',
                     type: "error",
                     confirmButtonClass: 'btn-danger',
                     confirmButtonText: 'Dammit',

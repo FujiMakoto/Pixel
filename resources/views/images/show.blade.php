@@ -19,7 +19,7 @@
 @stop
 
 {{-- Handle Delete Requests --}}
-@if ( ! empty($deleteKey) )
+@if ( $deleteKey = Request::get('deleteKey') )
     @section('scripts')
         <script>
             $(window).load(function() {

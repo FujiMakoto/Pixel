@@ -59,10 +59,6 @@ Route::group(['prefix' => 'images'], function ()
 		'uses' => 'ImageController@update'
 	]);
 
-	Route::get('{sid}/delete/{deleteKey}', [
-		'as'   => 'images.delete',
-		'uses' => 'ImageController@delete'
-	]);
 	Route::delete('{sid}', [
 		'as'   => 'images.destroy',
 		'uses' => 'ImageController@destroy'
