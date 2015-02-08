@@ -2,7 +2,7 @@
 
 use Pixel\Services\Image\Collection;
 
-interface Repository {
+interface RepositoryContract {
 
     /**
      * Scale constants
@@ -16,7 +16,8 @@ interface Repository {
      *
      * @param $sid
      *
-     * @return mixed
+     * @return this
+     * @throws ImageNotFoundException
      */
     public function getBySid($sid);
 
@@ -25,7 +26,8 @@ interface Repository {
      *
      * @param $id
      *
-     * @return mixed
+     * @return this
+     * @throws ImageNotFoundException
      */
     public function getById($id);
 
@@ -50,41 +52,71 @@ interface Repository {
     /**
      * Retrieve recently posted images
      *
+     * @param int  $page
      * @param int  $perPage
      * @param bool $withExpired
      * @param bool $withInvisible
      *
      * @return mixed
+     * @throws ImageNotFoundException
      */
-    public function recent($perPage = 12, $withExpired = false, $withInvisible = false);
+    public function recent($page = 1, $perPage = 12, $withExpired = false, $withInvisible = false);
 
     /**
      * Create a new image record
      *
-     * @param $params
+     * @param array $input
      *
-     * @return mixed
+     * @return this
      */
-    public function create($params);
+    public function create($input);
 
     /**
-     * Update an image record
+     * Update an image resource
      *
      * @return bool
+     * @throws ImageNotFoundException
      */
     public function save();
 
     /**
      * Permanently delete an image
      *
-     * @param $id
+     * @param int $id
      *
-     * @return mixed
+     * @return bool
      */
     public function delete($id);
 
     /**
-     * Get the absolute system path to an image
+     * Convert bytes to human readable format
+     *
+     * @param int $precision bytes
+     *
+     * @return string
+     */
+    public function getFilesize($precision = 2);
+
+    /**
+     * Get the file type for this image resource
+     *
+     * @param null|string $scale
+     *
+     * @return string
+     */
+    public function getType($scale = null);
+
+    /**
+     * Get the pseudo string identifier filename for HTTP requests
+     *
+     * @param null $scale
+     *
+     * @return string
+     */
+    public function getSidFilename($scale = null);
+
+    /**
+     * Get the absolute path to an image
      *
      * @param null|string $scale
      *

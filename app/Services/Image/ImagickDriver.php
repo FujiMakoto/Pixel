@@ -1,6 +1,6 @@
 <?php namespace Pixel\Services\Image;
 
-use Pixel\Contracts\Image\Repository;
+use Pixel\Contracts\Image\RepositoryContract;
 use Pixel\Exceptions\Image\UnreadableImageException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -35,11 +35,11 @@ class ImagickDriver extends ImageService {
     /**
      * Create scaled versions of an image resource
      *
-     * @param Repository $image
+     * @param RepositoryContract $image
      *
      * @return boolean
      */
-    public function createScaledImages(Repository $image)
+    public function createScaledImages(RepositoryContract $image)
     {
         // Create the preview image
         $previewConfig = config('pixel.scaling.preview');
@@ -103,14 +103,14 @@ class ImagickDriver extends ImageService {
     /**
      * Perform scaling on an image
      *
-     * @param string     $scale
-     * @param array      $config
-     * @param Repository $image
+     * @param string             $scale
+     * @param array              $config
+     * @param RepositoryContract $image
      *
      * @return bool
      * @throws UnreadableImageException
      */
-    private function scaleImage($scale, $config, Repository $image)
+    private function scaleImage($scale, $config, RepositoryContract $image)
     {
         // Make sure our configuration is valid
         if ( ! isset($config['quality'], $config['width'], $config['height']) ) {

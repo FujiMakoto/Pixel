@@ -169,7 +169,7 @@ class ImageController extends Controller {
 	 *
 	 * @return Response|App
 	 */
-	public function destroy($sid, ImageDestroyRequest $request)
+	public function destroy(ImageDestroyRequest $request, $sid)
 	{
 		// Fetch our requested resource
 		$image = $this->imageService->get($sid);

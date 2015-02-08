@@ -1,11 +1,8 @@
 <?php namespace Pixel\Services\Image;
 
-use Illuminate\Contracts\Filesystem\Cloud;
-use Pixel\Contracts\Image\ImageContract as ImageContract;
-use Pixel\Contracts\Image\Repository as RepositoryContract;
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Carbon\Carbon;
-use Pixel\Contracts\Image\Repository;
+use Pixel\Contracts\Image\ImageContract;
+use Pixel\Contracts\Image\RepositoryContract;
 use Pixel\Exceptions\Image\ImageNotFoundException;
 use Pixel\Exceptions\Image\UnsupportedFilesystemException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -63,7 +60,7 @@ abstract class ImageService implements ImageContract {
      *
      * @param string $sid
      *
-     * @return Repository
+     * @return RepositoryContract
      */
     public function get($sid)
     {
@@ -75,7 +72,7 @@ abstract class ImageService implements ImageContract {
      *
      * @param int $id
      *
-     * @return mixed
+     * @return RepositoryContract
      */
     public function getById($id)
     {
@@ -127,7 +124,7 @@ abstract class ImageService implements ImageContract {
      * @param UploadedFile $file
      * @param array        $params
      *
-     * @return mixed
+     * @return RepositoryContract
      */
     public function create(UploadedFile $file, array $params = [])
     {
@@ -204,7 +201,7 @@ abstract class ImageService implements ImageContract {
     public function delete($image)
     {
         // Make sure $image is a Repository instance
-        if ( ! $image instanceof Repository)
+        if ( ! $image instanceof RepositoryContract)
             $image = $this->get($image);
 
         // Set our filesystem paths
@@ -258,14 +255,14 @@ abstract class ImageService implements ImageContract {
     /**
      * Generate a download response for the specified image
      *
-     * @param Repository  $image
-     * @param string|null $scale
-     * @param string      $disposition
+     * @param RepositoryContract $image
+     * @param string|null        $scale
+     * @param string             $disposition
      *
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Symfony\Component\HttpFoundation\Response
      * @throws UnsupportedFilesystemException
      */
-    public function downloadResponse(Repository $image, $scale = null, $disposition = 'inline')
+    public function downloadResponse(RepositoryContract $image, $scale = null, $disposition = 'inline')
     {
         $fileSystem = config('filesystems.default');
         // @todo: Sendfile response
@@ -294,11 +291,11 @@ abstract class ImageService implements ImageContract {
     /**
      * Create scaled versions of an image resource
      *
-     * @param Repository $image
+     * @param RepositoryContract $image
      *
-     * @return mixed
+     * @return bool
      */
-    abstract public function createScaledImages(Repository $image);
+    abstract public function createScaledImages(RepositoryContract $image);
 
     /**
      * Get information about an uploaded image file

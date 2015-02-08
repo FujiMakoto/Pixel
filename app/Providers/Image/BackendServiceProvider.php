@@ -27,7 +27,7 @@ class BackendServiceProvider extends ServiceProvider {
     public function register()
     {
         $this->app->bind(
-            'Pixel\Contracts\Image\Repository',
+            'Pixel\Contracts\Image\RepositoryContract',
             'Pixel\Repositories\Image\DbRepository'
         );
     }

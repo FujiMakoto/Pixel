@@ -19,18 +19,18 @@ interface ImageContract {
     /**
      * Determine if an image exists
      *
-     * @param $sid
+     * @param string $sid
      *
-     * @return mixed
+     * @return boolean
      */
     public function exists($sid);
 
     /**
-     * Retrieve an image by its string identifier
+     * Retrieve an image
      *
      * @param string $sid
      *
-     * @return mixed
+     * @return RepositoryContract
      */
     public function get($sid);
 
@@ -39,7 +39,7 @@ interface ImageContract {
      *
      * @param int $id
      *
-     * @return mixed
+     * @return RepositoryContract
      */
     public function getById($id);
 
@@ -64,13 +64,14 @@ interface ImageContract {
     /**
      * Retrieve recently posted images
      *
+     * @param int  $page
      * @param int  $perPage
      * @param bool $withExpired
      * @param bool $withInvisible
      *
      * @return mixed
      */
-    public function recent($perPage = 12, $withExpired = false, $withInvisible = false);
+    public function recent($page = 1, $perPage = 12, $withExpired = false, $withInvisible = false);
 
     /**
      * Save a new image
@@ -78,7 +79,7 @@ interface ImageContract {
      * @param UploadedFile $image
      * @param array        $params
      *
-     * @return mixed
+     * @return RepositoryContract
      */
     public function create(UploadedFile $image, array $params = []);
 
@@ -93,6 +94,8 @@ interface ImageContract {
     public function crop($image, $params);
 
     /**
+     * Convert an image to the specified filetype
+     *
      * @param $image
      * @param $filetype
      *
@@ -105,36 +108,38 @@ interface ImageContract {
      *
      * @param $image
      *
-     * @return mixed
+     * @return bool
      */
     public function delete($image);
-
-    /**
-     * Generate a download response for the specified image
-     *
-     * @param Repository  $image
-     * @param string|null $scale
-     * @param string      $disposition
-     *
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Symfony\Component\HttpFoundation\Response
-     * @throws UnsupportedFilesystemException
-     */
-    public function downloadResponse(Repository $image, $scale = null, $disposition = 'inline');
 
     /**
      * Get the dominant color used in an image
      *
      * @param string $filePath
+     *
+     * @return array|bool
      */
     public function getImageDominantColor($filePath);
 
     /**
+     * Generate a download response for the specified image
+     *
+     * @param RepositoryContract $image
+     * @param string|null        $scale
+     * @param string             $disposition
+     *
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws UnsupportedFilesystemException
+     */
+    public function downloadResponse(RepositoryContract $image, $scale = null, $disposition = 'inline');
+
+    /**
      * Create scaled versions of an image resource
      *
-     * @param Repository $image
+     * @param RepositoryContract $image
      *
-     * @return mixed
+     * @return bool
      */
-    public function createScaledImages(Repository $image);
+    public function createScaledImages(RepositoryContract $image);
 
 }

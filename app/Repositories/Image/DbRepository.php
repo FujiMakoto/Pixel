@@ -3,7 +3,7 @@
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\Paginator;
-use Pixel\Contracts\Image\Repository as RepositoryContract;
+use Pixel\Contracts\Image\RepositoryContract;
 use Pixel\Exceptions\Image\ImageNotFoundException;
 use Pixel\Repositories\Repository;
 use Pixel\Repositories\Collection;

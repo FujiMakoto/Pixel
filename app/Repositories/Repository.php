@@ -18,7 +18,7 @@ abstract class Repository {
      *
      * @var array
      */
-    protected $dates = ['created_at', 'updated_at', 'expires_at', 'deleted_at'];
+    protected $dates = ['created_at', 'updated_at', 'expires_at'];
 
     /**
      * Create a new image repository instance
@@ -102,6 +102,27 @@ abstract class Repository {
         }
 
         return Carbon::instance($value);
+    }
+
+    /**
+     * Convert the repository instance to JSON.
+     *
+     * @param  int  $options
+     * @return string
+     */
+    public function toJson($options = 0)
+    {
+        return json_encode($this->toArray(), $options);
+    }
+
+    /**
+     * Convert the repository instance to an array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return (array)$this->attributes;
     }
 
     /**

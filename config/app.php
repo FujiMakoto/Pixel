@@ -151,6 +151,7 @@ return [
 		'Pixel\Providers\ConfigServiceProvider',
 		'Pixel\Providers\EventServiceProvider',
 		'Pixel\Providers\RouteServiceProvider',
+		'Pixel\Providers\ValidatorServiceProvider',
 		'Pixel\Providers\Image\ImageServiceProvider',
 		'Pixel\Providers\Image\BackendServiceProvider'
 
