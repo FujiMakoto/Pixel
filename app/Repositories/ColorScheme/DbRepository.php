@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Pixel\Exceptions\ColorScheme\ColorSchemeNotFoundException;
 use Pixel\Repositories\Repository;
 use Pixel\Repositories\Collection;
-use Pixel\ColorSchemes as ColorSchemesModel;
+use Pixel\ColorScheme as ColorSchemeModel;
 
 /**
  * Class DbRepository
@@ -22,7 +22,7 @@ class DbRepository extends Repository implements RepositoryContract {
     {
         // Set up a new Collection instance and get our Color Schemes
         $collection   = new Collection();
-        $colorSchemes = ColorSchemesModel::all();
+        $colorSchemes = ColorSchemeModel::all();
 
         foreach ($colorSchemes as $colorScheme)
             $collection->add( new static($colorScheme->toArray()) );
@@ -42,7 +42,7 @@ class DbRepository extends Repository implements RepositoryContract {
     public function getByName($name)
     {
         try {
-            $colorScheme = ColorSchemesModel::whereName($name)->firstOrFail()->toArray();
+            $colorScheme = ColorSchemeModel::whereName($name)->firstOrFail()->toArray();
         } catch (ModelNotFoundException $e) {
             throw new ColorSchemeNotFoundException("No color scheme by the name \"{$name}\" could be found");
         }
@@ -61,10 +61,10 @@ class DbRepository extends Repository implements RepositoryContract {
     public function synchronize(array $schemes)
     {
         // Delete any existing records
-        ColorSchemesModel::truncate();
+        ColorSchemeModel::truncate();
 
         // Bulk insert our new color schemes
-        ColorSchemesModel::insert($schemes);
+        ColorSchemeModel::insert($schemes);
 
         return true;
     }

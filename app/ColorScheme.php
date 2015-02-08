@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class ColorSchemes extends Model {
+class ColorScheme extends Model {
 
     /**
      * The table associated with the model.
