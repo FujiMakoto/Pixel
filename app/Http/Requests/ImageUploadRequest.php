@@ -12,6 +12,7 @@ class ImageUploadRequest extends Request
      */
     public function rules()
     {
+        // Required
         $rules[] = 'required';
 
         // Mime types
@@ -21,6 +22,9 @@ class ImageUploadRequest extends Request
         // Maximum filesize
         if ( $maxFilesize = config('pixel.upload.max_size') )
             $rules[] = 'max:' . $maxFilesize;
+
+        // Valid image file
+        $rules[] = 'valid_image';
 
         return [
             'image' => $rules
