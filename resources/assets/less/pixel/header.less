@@ -17,6 +17,24 @@
   position: absolute;
 }
 
+// Gradient themes
+#header.color-splash {
+  @primaryColor: #5650A5;
+  @colors: #814D97 0%, #A35294 6%, #5650A5 38%, #8D78B9 63%, #6C62A9 80%, #8E9BCF 100%;
+  .gradient(65deg, @colors, @primaryColor)
+}
+
 #header.ocean {
-  .gradient(135deg, #009696 10%, #390E7A 100%, #390E7A);
+  @primaryColor: #390E7A;
+  .dual-gradient(135deg, #009696 10%, #390E7A 100%, @primaryColor);
+}
+
+#header.flower {
+  @primaryColor: #D24866;
+  .triple-gradient(135deg, #FEA78C 0%, #D24866 35%, #671E49 95%, @primaryColor);
+}
+
+#header.purple {
+  @primaryColor: #55026E;
+  .triple-gradient(135deg, #170046 0%, #55026E 53%, #290251 75%, @primaryColor);
 }
