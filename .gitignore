@@ -1,0 +1,6 @@
+/vendor
+.env
+/public/build
+bower_components
+.idea
+_ide_helper.php

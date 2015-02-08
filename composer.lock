@@ -558,12 +558,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "430522ee8298345bde4bbe62773b53ff7c661cd0"
+                "reference": "ff944d562ec9913ec4cc5a6f5762f3084ae15ce4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/430522ee8298345bde4bbe62773b53ff7c661cd0",
-                "reference": "430522ee8298345bde4bbe62773b53ff7c661cd0",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/ff944d562ec9913ec4cc5a6f5762f3084ae15ce4",
+                "reference": "ff944d562ec9913ec4cc5a6f5762f3084ae15ce4",
                 "shasum": ""
             },
             "require": {
@@ -675,7 +675,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2015-02-04 14:15:18"
+            "time": "2015-02-06 20:28:13"
         },
         {
             "name": "league/flysystem",
@@ -683,12 +683,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "0fd4d3d2dd97d5b1c937d4bb8f42f7a3776cf782"
+                "reference": "f31699eafc5299f93ae55f9ca48cfe4f4695b8b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/0fd4d3d2dd97d5b1c937d4bb8f42f7a3776cf782",
-                "reference": "0fd4d3d2dd97d5b1c937d4bb8f42f7a3776cf782",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/f31699eafc5299f93ae55f9ca48cfe4f4695b8b7",
+                "reference": "f31699eafc5299f93ae55f9ca48cfe4f4695b8b7",
                 "shasum": ""
             },
             "require": {
@@ -758,7 +758,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2015-02-04 20:51:56"
+            "time": "2015-02-07 09:24:21"
         },
         {
             "name": "monolog/monolog",
@@ -878,16 +878,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "1.13.0",
+            "version": "1.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "5cb6e71055f7b0b57956b73d324cc4de31278f42"
+                "reference": "bb87460c995d97fe55b39e65f6ffb7f64b0a941e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/5cb6e71055f7b0b57956b73d324cc4de31278f42",
-                "reference": "5cb6e71055f7b0b57956b73d324cc4de31278f42",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/bb87460c995d97fe55b39e65f6ffb7f64b0a941e",
+                "reference": "bb87460c995d97fe55b39e65f6ffb7f64b0a941e",
                 "shasum": ""
             },
             "require": {
@@ -920,7 +920,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2014-09-26 02:52:02"
+            "time": "2015-02-06 05:07:29"
         },
         {
             "name": "nikic/php-parser",
@@ -2677,12 +2677,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "a972b59f661ecfc8a18f2045263f63e314d6bc00"
+                "reference": "b2f927633a6de7525b8448a0694d6a0ad0339ff4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a972b59f661ecfc8a18f2045263f63e314d6bc00",
-                "reference": "a972b59f661ecfc8a18f2045263f63e314d6bc00",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b2f927633a6de7525b8448a0694d6a0ad0339ff4",
+                "reference": "b2f927633a6de7525b8448a0694d6a0ad0339ff4",
                 "shasum": ""
             },
             "require": {
@@ -2715,7 +2715,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.6.x-dev"
+                    "dev-master": "4.7.x-dev"
                 }
             },
             "autoload": {
@@ -2741,7 +2741,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-02-05 15:42:36"
+            "time": "2015-02-07 18:41:53"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
