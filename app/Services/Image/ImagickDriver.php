@@ -1,6 +1,7 @@
 <?php namespace Pixel\Services\Image;
 
 use Pixel\Contracts\Image\Repository;
+use Pixel\Exceptions\Image\UnreadableImageException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ImagickDriver extends ImageService {
@@ -57,12 +58,19 @@ class ImagickDriver extends ImageService {
      * @param UploadedFile $file
      *
      * @return array
+     * @throws UnreadableImageException
      */
     protected function getImageData(UploadedFile $file)
     {
-        // Get the file path and create a new Imagick instance
+        // Get the file path
         $filePath = $file->getRealPath();
-        $imagick  = new \Imagick($filePath);
+
+        // Create an imagick instance or throw an exception if we can't read the image
+        try {
+            $imagick = new \Imagick($filePath);
+        } catch (\ImagickException $e) {
+            throw new UnreadableImageException($e->getMessage(), $e->getCode());
+        }
 
         // Define an array of image data
         $data['md5sum'] = md5_file($filePath);
@@ -100,6 +108,7 @@ class ImagickDriver extends ImageService {
      * @param Repository $image
      *
      * @return bool
+     * @throws UnreadableImageException
      */
     private function scaleImage($scale, $config, Repository $image)
     {
@@ -118,8 +127,12 @@ class ImagickDriver extends ImageService {
         $fileContents = $this->filesystem->get($filePath);
 
         // Instantiate a new Imagick instance
-        $imagick = new \Imagick();
-        $imagick->readImageBlob($fileContents);
+        try {
+            $imagick = new \Imagick();
+            $imagick->readImageBlob($fileContents);
+        } catch (\ImagickException $e) {
+            throw new UnreadableImageException($e->getMessage(), $e->getCode());
+        }
 
         // Get and make sure our base filesystem path exists
         $scalePath = $image->getBasePath($scale);
@@ -135,7 +148,7 @@ class ImagickDriver extends ImageService {
         }
 
         // Define the default Imagick parameters
-        $imagick->setImageInterlaceScheme(\Imagick::INTERLACE_PLANE);
+        $imagick->setImageInterlaceScheme(\Imagick::INTERLACE_LINE);
         $imagick->setSamplingFactors([1,1,1]);
 
         // Scale or crop the image
