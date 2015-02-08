@@ -11,8 +11,6 @@
 |
 */
 
-//Route::get('/', 'WelcomeController@index');
-
 Route::get('/', [
 	'as'   => 'home',
 	'uses' => 'ImageController@create'
@@ -61,6 +59,10 @@ Route::group(['prefix' => 'images'], function ()
 		'uses' => 'ImageController@update'
 	]);
 
+	Route::get('{sid}/delete/{deleteKey}', [
+		'as'   => 'images.delete',
+		'uses' => 'ImageController@delete'
+	]);
 	Route::delete('{sid}', [
 		'as'   => 'images.destroy',
 		'uses' => 'ImageController@destroy'
@@ -81,7 +83,3 @@ Route::group(['prefix' => 'i'], function ()
 	])
 	->where(['sidFile' => '[0-9A-Za-z]{7}\\.[a-z]{3,4}']);
 });
-
-Route::post('upload', [
-	'as' => 'upload'
-]);
