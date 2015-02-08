@@ -1,15 +1,16 @@
 <?php namespace Pixel\Http\Controllers;
 
-use Pixel\Http\Requests\ImageUploadRequest;
-use Illuminate\Session\SessionInterface;
-use Pixel\Contracts\Image\ImageContract;
 use Pixel\Http\Requests;
-use Pixel\Http\Controllers\Controller;
-
+use Pixel\Http\Requests\ImageUploadRequest;
+use Pixel\Contracts\Image\ImageContract;
 use Illuminate\Http\Request;
+use Response;
 use Session;
-use Pixel\Services\Image\ImageService;
 
+/**
+ * Class ImageController
+ * @package Pixel\Http\Controllers
+ */
 class ImageController extends Controller {
 
 	/**
@@ -20,7 +21,7 @@ class ImageController extends Controller {
 	/**
 	 * Constructor
 	 *
-	 * @param ImageContract    $imageService
+	 * @param ImageContract $imageService
 	 */
 	public function __construct(ImageContract $imageService)
 	{
@@ -28,8 +29,7 @@ class ImageController extends Controller {
 	}
 
 	/**
-	 * Display a listing of the resource.
-	 * (This is just a placeholder, a public listing is still under consideration)
+	 * Redirect to the homepage
 	 * GET /images
 	 *
 	 * @return Response
@@ -40,7 +40,7 @@ class ImageController extends Controller {
 	}
 
 	/**
-	 * Show the form for creating a new resource.
+	 * Show the image upload form
 	 * GET /images/create
 	 *
 	 * @return Response
@@ -51,7 +51,7 @@ class ImageController extends Controller {
 	}
 
 	/**
-	 * Store a newly created resource in storage.
+	 * Process the uploaded image
 	 * POST /images
 	 *
 	 * @param ImageUploadRequest $request
@@ -75,26 +75,23 @@ class ImageController extends Controller {
 	}
 
 	/**
-	 * Display the specified resource.
+	 * Display the preview page for the specified image
 	 * GET /images/{sid}
 	 *
-	 * @param  string       $sid
+	 * @param string $sid
 	 *
 	 * @return Response
 	 */
 	public function show($sid)
 	{
 		$image = $this->imageService->get($sid);
-		//dd($image);
 
-		// Can we edit this image?
+		// Can we edit this image? (@todo: temporary)
 		$canEdit = false;
 		$guestOwnsImage = in_array( $image->id, Session::get('owned_images', []) );
 
 		if ($guestOwnsImage)
 			$canEdit = true;
-
-		//return $imageService->downloadResponse($image, $image::PREVIEW);
 
 		return view('images/show')->with([
 			'image'   => $image,
@@ -103,10 +100,10 @@ class ImageController extends Controller {
 	}
 
 	/**
-	 * Process an image download request
+	 * Process a download request for the specified image
 	 *
-	 * @param Request       $request
-	 * @param               $sidFile
+	 * @param Request $request
+	 * @param         $sidFile
 	 *
 	 * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Symfony\Component\HttpFoundation\Response
 	 */
@@ -143,11 +140,12 @@ class ImageController extends Controller {
 			])->setStatusCode(301);
 		}
 
+        // Return the download response for our configured backend
 		return $this->imageService->downloadResponse($image, $scale);
 	}
 
 	/**
-	 * Display the image deletion confirmation page
+	 * Display the confirmation page for image deletion
 	 * GET /images/{sid}/delete/{deleteKey}
 	 *
 	 * @param $sid
@@ -157,19 +155,19 @@ class ImageController extends Controller {
 	 */
 	public function delete($sid, $deleteKey)
 	{
-		// Set the deleteKey and return the default images.show page
+		// Set the deleteKey and return the default show method
 		view()->share('deleteKey', $deleteKey);
 		return $this->show($sid);
 	}
 
 	/**
-	 * Remove the specified resource from storage.
+	 * Remove the specified image
 	 * DELETE /images/{sid}
 	 *
 	 * @param string $sid
 	 * @param Request $request
 	 *
-	 * @return Response
+	 * @return Response|App
 	 */
 	public function destroy($sid, Request $request)
 	{
