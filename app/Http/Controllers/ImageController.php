@@ -1,7 +1,7 @@
 <?php namespace Pixel\Http\Controllers;
 
-use Pixel\Http\Requests;
 use Pixel\Http\Requests\ImageUploadRequest;
+use Pixel\Http\Requests\ImageDestroyRequest;
 use Pixel\Contracts\Image\ImageContract;
 use Illuminate\Http\Request;
 use Response;
@@ -165,11 +165,11 @@ class ImageController extends Controller {
 	 * DELETE /images/{sid}
 	 *
 	 * @param string $sid
-	 * @param Request $request
+	 * @param ImageDestroyRequest $request
 	 *
 	 * @return Response|App
 	 */
-	public function destroy($sid, Request $request)
+	public function destroy($sid, ImageDestroyRequest $request)
 	{
 		// Fetch our requested resource
 		$image = $this->imageService->get($sid);
