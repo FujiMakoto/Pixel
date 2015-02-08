@@ -116,6 +116,13 @@ interface RepositoryContract {
     public function getSidFilename($scale = null);
 
     /**
+     * Get the color scheme for this image
+     *
+     * @return string
+     */
+    public function getColorScheme();
+
+    /**
      * Get the absolute path to an image
      *
      * @param null|string $scale
