@@ -94,6 +94,47 @@ trait AttributeAccessors {
     }
 
     /**
+     * Get the raw URL to the image resource
+     *
+     * @param null|string $scale
+     * @param array       $localParams
+     *
+     * @return string|null
+     */
+    public function getUrl($scale = null, array $localParams = [])
+    {
+        // Get our configured filesystem
+        $fileSystem = config('filesystems.default');
+
+        // Set parameters for local routes
+        $localParams['sidFile'] = $this->getSidFilename();
+
+        switch ($scale) {
+            case self::PREVIEW:
+                $localParams['size'] = 'preview';
+                break;
+
+            case self::THUMBNAIL:
+                $localParams['size'] = 'thumbnail';
+                break;
+        }
+
+        // If we're using the local filesystem, return our download route
+        if ($fileSystem == 'local')
+            return route('images.download', $localParams);
+
+        // If we're using Amazon S3, return a direct link to the image
+        if ($fileSystem == 's3') {
+            $bucket   = config('filesystems.disks.s3.bucket');
+            $filePath = $this->getRealPath($scale);
+            return "https://s3.amazonaws.com/{$bucket}/{$filePath}";
+        }
+
+        // Unknown filesystem, return null
+        return null;
+    }
+
+    /**
      * Get the absolute path to an image
      *
      * @param null|string $scale

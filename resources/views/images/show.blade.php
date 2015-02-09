@@ -1,15 +1,15 @@
 @extends('app')
 
+{{-- Color Scheme --}}
+@section('color-scheme'){{ $image->getColorScheme() }}@stop
+
 @section('content')
     <div class="container image-show-container">
         {{-- Image Preview --}}
         <div class="preview-container">
             <div class="image-preview">
-                {!! HTML::image(route('images.download', [
-                    'size' => 'preview',
-                    'sidFile' => $image->getSidFilename($image::PREVIEW)]),
-                    $image->name,
-                    ['id' => 'preview']) !!}
+                {{-- Preview Image --}}
+                {!! HTML::image($image->getUrl($image::PREVIEW), $image->name, ['id' => 'preview']) !!}
             </div>
         </div>
 

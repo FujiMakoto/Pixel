@@ -54,7 +54,7 @@
 			{{-- /Navigation --}}
 		</div>
 		{{-- Header --}}
-		<div id="header" class="ocean">
+		<div id="header" class="@yield('color-scheme', 'purple')">
 			<div class="container">
 				<div class="row">
 
