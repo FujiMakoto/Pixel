@@ -11,6 +11,8 @@
 	<!-- Fonts -->
 	<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
 
+	@yield('styling')
+
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 	<!--[if lt IE 9]>
@@ -90,6 +92,7 @@
 		var csrf_token  = "{{ csrf_token() }}";
 		var upload_path = "@yield('upload_path', Request::url())";
 		var home_path   = "{{ route('home') }}";
+		var base_path   = "{{ url('') }}";
 	</script>
 
 	<script src="{{ elixir("js/all.js") }}"></script>
