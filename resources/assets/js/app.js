@@ -15,8 +15,48 @@ imageInput.fileinput({
 });
 
 imageInput.on('fileloaded', function(event, file, previewId, index, reader) {
+    // Render the preview image
     readURL(this);
-    $(this).fileinput('upload');
+
+    // Once the preview image has loaded..
+    imagePreview
+        .on('load', function() {
+            // Are we triggering on a reset?
+            if (this.src == previewImage) {
+                return false;
+            }
+
+            // Get the dominant color for this image
+            var colorThief = new ColorThief();
+            var color = colorThief.getColor(imagePreview[0]);
+
+            // Get the color scheme and theme for this dominant color
+            $.get(base_path + '/ajax/accentuation', { red: color[0], green: color[1], blue: color[2] })
+                .done(function(data) {
+                    // Append the custom styling to our <head>
+                    if (data.styling) {
+                        $( data.styling ).appendTo( "head" );
+                    }
+
+                    // Switch our header
+                    if (data.colorScheme && data.colorScheme.name) {
+                        var headerSecondary = $(".header.secondary");
+                        headerSecondary.addClass(data.colorScheme.name);
+                        headerSecondary.addClass('in');
+                    }
+
+                    // Start the file upload
+                    imageInput.fileinput('upload');
+                })
+                // Ajax error, ignore and start upload
+                .error(function() {
+                    imageInput.fileinput('upload');
+                })
+        })
+        // Image read error, ignore and start upload
+        .error(function() {
+            imageInput.fileinput('upload');
+        })
 });
 
 imageInput.on('fileclear', function(event) {
@@ -110,6 +150,24 @@ $(".copy-on-dblclick").dblclick( function() {
     var copyEvent = new ClipboardEvent('copy', { dataType: 'text/plain', data: $(this).val() } );
     document.dispatchEvent(copyEvent);
 });
+
+// Image button toolbar - fade on preview hover
+$(".image-preview").hover(function () {
+    var imageOptionsToolbar = $(".btn-toolbar", this);
+
+    if (imageOptionsToolbar.length) {
+        imageOptionsToolbar.toggleClass('in');
+    }
+})
+
+// Disable the download button temporarily on click
+$('.btn.download').on('click', function() {
+    var downloadButton = $(this);
+    downloadButton.attr("disabled", true);
+    setTimeout(function() {
+        downloadButton.attr("disabled", false);
+    }, 2500);
+})
 
 // Delete a specified resource
 function deleteResource(options) {

@@ -41,7 +41,7 @@ class ColorschemesSynchronize extends Command {
 
 		// Parse the color schemes using regular expression matching
 		$colorSchemes = [];
-		$pattern      = '/#header\\.(?P<names>[A-Za-z-]+) {\\n\\s+@primaryColor: (?P<colors>[#0-9A-Za-z]+);/';
+		$pattern      = '/&\\.(?P<names>[A-Za-z-]+) {\\n\\s+@primaryColor: (?P<colors>[#0-9A-Za-z]+);/';
 		preg_match_all($pattern, $lessTemplate, $colorSchemes);
 
 		// Empty result?

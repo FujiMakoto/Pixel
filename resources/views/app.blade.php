@@ -55,24 +55,41 @@
 			</div>
 			{{-- /Navigation --}}
 		</div>
+
 		{{-- Header --}}
-		<div id="header" class="@yield('color-scheme', 'purple')">
-			<div class="container">
-				<div class="row">
+		<div id="header-container">
+			{{-- Primary --}}
+			<div class="header @yield('color-scheme', 'purple')">
+				<div class="container">
+					<div class="row">
+						<div style="margin-top: 35px;" class="col-md-12">
+							<h4>Single Image Uploader</h4>
+						</div>
 
-					<div style="margin-top: 35px;" class="col-md-12">
-						<h4>Single Image Uploader</h4>
+						<div class="col-md-12 subtext">
+							<span>Want to create an album instead?</span>
+							<a href="sign-up.html">Click here</a>
+						</div>
 					</div>
+				</div>
+			</div>
 
-					<div class="col-md-12 subtext">
-						<span>Want to create an album instead?</span>
-						<a href="sign-up.html">Click here</a>
+			{{-- Secondary --}}
+			<div class="header secondary fade">
+				<div class="container">
+					<div class="row">
+						<div style="margin-top: 35px;" class="col-md-12">
+							<h4>Single Image Uploader</h4>
+						</div>
+
+						<div class="col-md-12 subtext">
+							<span>Want to create an album instead?</span>
+							<a href="sign-up.html">Click here</a>
+						</div>
 					</div>
-
 				</div>
 			</div>
 		</div>
-		{{-- /Header --}}
 	</nav>
 
 	@yield('content')

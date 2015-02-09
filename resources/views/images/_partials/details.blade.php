@@ -2,13 +2,13 @@
 <div class="col-md-8 col-sm-12">
     <div class="input-group margin-bottom-sm">
         <span class="input-group-addon"><i class="fa fa-external-link fa-fw"></i></span>
-        <input class="form-control select-on-focus copy-on-dblclick" readonly type="text"
+        <input class="form-control accented select-on-focus copy-on-dblclick" readonly type="text"
                value="{{ route('images.shortShow', ['sid' => $image->sid]) }}">
     </div>
 
     <div class="input-group">
         <span class="input-group-addon"><i class="fa fa-image fa-fw"></i></span>
-        <input class="form-control select-on-focus copy-on-dblclick" readonly type="text"
+        <input class="form-control accented select-on-focus copy-on-dblclick" readonly type="text"
                value="{{ route('images.shortDownload', ['sidFile' => $image->getSidFilename()]) }}">
     </div>
 
@@ -16,7 +16,7 @@
         <hr>
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-trash-o fa-fw"></i></span>
-            <input class="form-control select-on-focus reveal-on-focus copy-on-dblclick" readonly type="text"
+            <input class="form-control accented select-on-focus reveal-on-focus copy-on-dblclick" readonly type="text"
                    value="Click to reveal the image deletion link"
                    data-reveal-text="{{ route('images.show', ['sid' => $image->sid, 'deleteKey' => $image->delete_key]) }}">
         </div>

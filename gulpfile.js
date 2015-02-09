@@ -26,9 +26,10 @@ elixir(function(mix) {
     ], './'),
     mix.scripts([
         'bower_components/jquery/dist/jquery.js',
-        'bower_components/bootstrap/js/',
+        'bower_components/bootstrap/js/dropdown.js',
         'bower_components/bootstrap-fileinput/js/fileinput.js',
         'bower_components/bootstrap-sweetalert/lib/sweet-alert.js',
+        'bower_components/color-thief/src/color-thief.js',
         'resources/assets/js/app.js'
     ], './')
     mix.version(["css/all.css", "js/all.js"]);
