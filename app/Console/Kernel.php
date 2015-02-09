@@ -12,6 +12,7 @@ class Kernel extends ConsoleKernel {
 	 */
 	protected $commands = [
 		'Pixel\Console\Commands\Inspire',
+		'Pixel\Console\Commands\ColorschemesSynchronize'
 	];
 
 	/**

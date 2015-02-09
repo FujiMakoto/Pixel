@@ -50,9 +50,9 @@ return [
 
 		's3' => [
 			'driver' => 's3',
-			'key'    => 'your-key',
-			'secret' => 'your-secret',
-			'bucket' => 'your-bucket',
+			'key'    => env('FS_S3_KEY', 'your-key'),
+			'secret' => env('FS_S3_SECRET', 'your-secret'),
+			'bucket' => env('FS_S3_BUCKET', 'your-bucket'),
 		],
 
 		'rackspace' => [

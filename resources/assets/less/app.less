@@ -1,8 +1,19 @@
-@import "bootstrap/bootstrap";
+// Bootstrap
+@import "/bower_components/bootstrap/less/bootstrap";
 
+// Bootstrap overrides
 @btn-font-weight: 300;
+@navbar-border-radius: 0px;
 @font-family-sans-serif: "Roboto", Helvetica, Arial, sans-serif;
 
 body, label, .checkbox label {
-	font-weight: 300;
+  font-weight: 300;
 }
+
+// Bower components
+@import "/bower_components/font-awesome/less/font-awesome";
+@import "/bower_components/bootstrap-social/bootstrap-social";
+@import "bower_components/bootstrap-sweetalert/lib/sweet-alert.less";
+
+// Application imports
+@import "pixel/pixel";
