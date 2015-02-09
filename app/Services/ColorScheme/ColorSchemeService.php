@@ -143,9 +143,7 @@ class ColorSchemeService implements ColorSchemeContract {
      * @param string $green
      * @param string $blue
      *
-     * @return array
-     * @internal param string $hex
-     *
+     * @return string
      */
     public function rgbToHex($red, $green, $blue)
     {
