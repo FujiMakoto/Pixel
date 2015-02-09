@@ -44,4 +44,26 @@ interface ColorSchemeContract {
      */
     public function synchronize(array $schemes);
 
+    /**
+     * Convert a hex color code to a RGB array
+     *
+     * @param string $hex
+     *
+     * @return array
+     */
+    public function hexToRgb($hex);
+
+    /**
+     * Convert a hex color code to a RGB array
+     *
+     * @param string $red
+     * @param string $green
+     * @param string $blue
+     *
+     * @return array
+     * @internal param string $hex
+     *
+     */
+    public function rgbToHex($red, $green, $blue);
+
 }

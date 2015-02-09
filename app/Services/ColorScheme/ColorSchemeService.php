@@ -78,10 +78,7 @@ class ColorSchemeService implements ColorSchemeContract {
         // If we're still here, assume we have a hex string
         else
         {
-            $sRGB = new sRGB($value);
-            $color['red']   = $sRGB->r;
-            $color['green'] = $sRGB->g;
-            $color['blue']  = $sRGB->b;
+            $color = $this->hexToRgb($value);
         }
 
         // First, fetch all of our available color schemes
@@ -119,6 +116,42 @@ class ColorSchemeService implements ColorSchemeContract {
     public function synchronize(array $schemes)
     {
         return $this->colorSchemeRepo->synchronize($schemes);
+    }
+
+    /**
+     * Convert a hex color code to a RGB array
+     *
+     * @param string $hex
+     *
+     * @return array
+     */
+    public function hexToRgb($hex)
+    {
+        // Convert the hex string to an array of RGB values
+        $sRGB = new sRGB($hex);
+        $color['red']   = $sRGB->r;
+        $color['green'] = $sRGB->g;
+        $color['blue']  = $sRGB->b;
+
+        return $color;
+    }
+
+    /**
+     * Convert a hex color code to a RGB array
+     *
+     * @param string $red
+     * @param string $green
+     * @param string $blue
+     *
+     * @return array
+     * @internal param string $hex
+     *
+     */
+    public function rgbToHex($red, $green, $blue)
+    {
+        // Convert the RGB array to a hex string
+        $sRGB = new sRGB($red, $green, $blue);
+        return $sRGB->toHex();
     }
 
 }
