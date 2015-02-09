@@ -123,6 +123,16 @@ interface RepositoryContract {
     public function getColorScheme();
 
     /**
+     * Get the raw URL to the image resource
+     *
+     * @param null|string $scale
+     * @param array       $localParams
+     *
+     * @return string|null
+     */
+    public function getUrl($scale = null, array $localParams = []);
+
+    /**
      * Get the absolute path to an image
      *
      * @param null|string $scale
