@@ -68,8 +68,14 @@ class ImageController extends Controller {
 			Session::push('owned_images', $image->id);
 
 		// Redirect to the newly created image resource
-		if ( $request->ajax() )
-			return response()->json(['redirect' => route('images.show', ['sid' => $image->sid])]);
+		if ( $request->ajax() ) {
+			$response['templates']['imageDetails'] = view('images/_partials/details', ['image' => $image, 'canEdit' => true])->render();
+			$response['uploadUrl'] = route('images.show', ['sid' => $image->sid]);
+
+			return response()->json($response);
+		}
+
+		//return response()->json(['redirect' => route('images.show', ['sid' => $image->sid])]);
 
 		return response()->redirectToRoute('images.show', ['sid' => $image->sid]);
 	}

@@ -79,3 +79,12 @@ Route::group(['prefix' => 'i'], function ()
 	])
 	->where(['sidFile' => '[0-9A-Za-z]{7}\\.[a-z]{3,4}']);
 });
+
+// Ajax routes
+Route::group(['prefix' => 'ajax'], function()
+{
+	Route::match(['GET', 'POST'], 'accentuation', [
+		'as'   => 'ajax.accentuation',
+		'uses' => 'AjaxController@accentuation'
+	]);
+});

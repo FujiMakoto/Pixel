@@ -153,7 +153,9 @@ return [
 		'Pixel\Providers\RouteServiceProvider',
 		'Pixel\Providers\ValidatorServiceProvider',
 		'Pixel\Providers\Image\ImageServiceProvider',
-		'Pixel\Providers\Image\BackendServiceProvider'
+		'Pixel\Providers\Image\BackendServiceProvider',
+		'Pixel\Providers\ColorScheme\ColorSchemeServiceProvider',
+		'Pixel\Providers\ColorScheme\BackendServiceProvider'
 
 	],
 
@@ -203,7 +205,8 @@ return [
 		'HTML'      => 'Illuminate\Html\HtmlFacade',
 		'Form'      => 'Illuminate\Html\FormFacade',
 
-		'Image'     => 'Pixel\Facades\Image'
+		'Image'     => 'Pixel\Facades\Image',
+		'ColorScheme' => 'Pixel\Facades\ColorScheme'
 
 	],
 

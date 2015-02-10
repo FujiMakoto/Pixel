@@ -42,7 +42,9 @@
         </div>
 
         {{-- Image Details --}}
-        @include('images/_partials/details')
+        <div id="image-details">
+            @include('images/_partials/details')
+        </div>
     </div>
 @stop
 
@@ -59,3 +61,14 @@
         </script>
     @stop
 @endif
+
+@section('scripts')
+    <script>
+        $(window).load(function() {
+            // Center the users viewport on the preview image
+            $('html,body').animate({
+                scrollTop: imagePreview.offset().top - ( $(window).height() - imagePreview.outerHeight(true) ) / 2
+            }, 1025);
+        });
+    </script>
+@stop
