@@ -6,7 +6,7 @@
     }
 
     {{-- Upload Progress --}}
-    .kv-upload-progress .progress-bar {
+    .progress-bar.accented {
         background-color: rgb({{ $image['red'] }}, {{ $image['green'] }}, {{ $image['blue'] }}) !important;
     }
 </style>

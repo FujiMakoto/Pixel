@@ -6,7 +6,22 @@ pixel.config["imageInput"].fileinput({
     uploadExtraData: {"_token": pixel.config["csrf_token"]},
     browseIcon: '<i class="fa fa-folder-open"></i> ',
     layoutTemplates: {
-        icon: '<span class="fa fa-picture-o kv-caption-icon"></span> '
+        icon: '<span class="fa fa-picture-o kv-caption-icon"></span> ',
+        main1: '{preview}\n' +
+        '<div class="kv-upload-progress hide"></div>\n' +
+        '<div class="input-group {class}">\n' +
+        '   {caption}\n' +
+        '   <div class="input-group-btn">\n' +
+        '       {remove}\n' +
+        '       {cancel}\n' +
+        '       {browse}\n' +
+        '   </div>\n' +
+        '</div>',
+        progress: '<div class="progress">\n' +
+        '    <div class="progress-bar progress-bar-success progress-bar-striped accented text-center" role="progressbar" aria-valuenow="{percent}" aria-valuemin="0" aria-valuemax="100" style="width:{percent}%;">\n' +
+        '        {percent}%\n' +
+        '     </div>\n' +
+        '</div>'
     },
     allowedFileTypes: ['image'],
     showPreview: false

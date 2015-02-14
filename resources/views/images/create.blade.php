@@ -10,7 +10,7 @@
         </div>
         <div id="image-upload-form">
             {!! Form::open(['url' => 'home', 'files' => true]) !!}
-                {!! Form::file('image', ['id' => 'single-image-input']) !!}
+                {!! Form::file('image', ['id' => 'single-image-input', 'accept' => 'image/*']) !!}
             {!! Form::close() !!}
         </div>
     </div>
