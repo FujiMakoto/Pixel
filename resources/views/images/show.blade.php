@@ -25,7 +25,7 @@
                         </a>
 
                         {{-- Image Options --}}
-                        @if ($canEdit)
+                        @if ( $image->canEdit() )
                             <button type="button" class="btn btn-default dropdown-toggle" id="image-options" data-toggle="dropdown">
                                 <i class="fa fa-cog fw"></i>
                             </button>

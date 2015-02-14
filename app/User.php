@@ -37,8 +37,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @var array
 	 */
 	protected $casts = [
+		'id'           => 'integer',
 		'is_admin'     => 'boolean',
-		'is_moderator' => 'boolean'
+		'is_moderator' => 'boolean',
 	];
 
 	/**

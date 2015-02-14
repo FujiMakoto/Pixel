@@ -133,9 +133,10 @@ abstract class ImageService implements ImageContract {
 
         // Set some additional fields
         $params['sid']             = str_random('7');
-        $params['delete_key']      = str_random('40');
+        $params['delete_key']      = \Auth::guest() ? str_random('40') : null;
         $params['original_width']  = $imageData['width'];
         $params['original_height'] = $imageData['height'];
+        $params['user_id']         = \Auth::check() ? \Auth::id() : 0;
         $params['upload_ip']       = \Request::getClientIp();
         $params['upload_uagent']   = \Request::server('HTTP_USER_AGENT');
 
@@ -149,6 +150,10 @@ abstract class ImageService implements ImageContract {
 
         // Create the image in our repository
         $image = $this->imageRepo->create($params);
+
+        // If we're a guest, set an ownership flag in our session
+        if ( \Auth::guest() )
+            \Session::push('owned_images', $image->id);
 
         # Images are saved in YYYY/MM/DD sub-directories with md5sum's as file names.
         # This is useful in multiple ways, it avoids wasting storage space by saving multiple

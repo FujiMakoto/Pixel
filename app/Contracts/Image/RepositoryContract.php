@@ -1,5 +1,6 @@
 <?php namespace Pixel\Contracts\Image;
 
+use Illuminate\Contracts\Auth\Guard;
 use Pixel\Services\Image\Collection;
 
 interface RepositoryContract {
@@ -149,5 +150,21 @@ interface RepositoryContract {
      * @return bool|string
      */
     public function getBasePath($scale = null);
+
+    /**
+     * Do we have permission to edit this image?
+     *
+     * @return bool
+     */
+    public function canEdit();
+
+    /**
+     * Make sure our specified delete key matches our image's
+     *
+     * @param string $deleteKey
+     *
+     * @return bool
+     */
+    public function checkDeleteKey($deleteKey);
 
 }

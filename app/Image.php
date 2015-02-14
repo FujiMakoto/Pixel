@@ -12,4 +12,15 @@ class Image extends Model {
      */
 	protected $guarded = ['id', 'deleted_at'];
 
+    /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id'       => 'integer',
+        'user_id'  => 'integer',
+        'album_id' => 'integer'
+    ];
+
 }

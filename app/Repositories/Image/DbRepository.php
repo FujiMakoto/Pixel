@@ -15,7 +15,7 @@ use Pixel\Image as ImageModel;
  */
 class DbRepository extends Repository implements RepositoryContract {
 
-    use AttributeAccessors;
+    use AttributeAccessors, Permissions;
 
     /**
      * Retrieve an image by its string identifier

@@ -1,5 +1,6 @@
 <?php namespace Pixel\Http\Controllers;
 
+use Illuminate\Contracts\Auth\Guard;
 use Pixel\Http\Requests\ImageUploadRequest;
 use Pixel\Http\Requests\ImageDestroyRequest;
 use Pixel\Contracts\Image\ImageContract;
@@ -55,17 +56,14 @@ class ImageController extends Controller {
 	 * POST /images
 	 *
 	 * @param ImageUploadRequest $request
+	 * @param Guard              $auth
 	 *
 	 * @return Response
 	 */
-	public function store(ImageUploadRequest $request)
+	public function store(ImageUploadRequest $request, Guard $auth)
 	{
 		// Create the image
 		$image = $this->imageService->create( $request->file('image') );
-
-		// If we're a guest, set an ownership flag in our session
-		if ( \Auth::guest() )
-			Session::push('owned_images', $image->id);
 
 		// Redirect to the newly created image resource
 		if ( $request->ajax() ) {
@@ -164,24 +162,39 @@ class ImageController extends Controller {
 		// Fetch our requested resource
 		$image = $this->imageService->get($sid);
 
-		// Was this image uploaded by a guest?
-		if ($image->user_id == 0) {
-			// Did we receive a valid delete key with our request?
-			if ( $request->has('deleteKey') && ($request->get('deleteKey') == $image->delete_key) ) {
-				// Delete the image and return success
+		// Delete an image using a key
+		if ( $request->has('deleteKey') )
+		{
+			if ( $image->checkDeleteKey( $request->get('deleteKey') ) )
+			{
 				$this->imageService->delete($image);
 
 				if ( $request->ajax() )
 					return response()->json(['success' => true]);
 
 				return response()->redirectToRoute('home');
-			} else {
+			}
+			else
+			{
 				if ( $request->ajax() )
 					return response()->json('Invalid delete key provided', 403);
 
 				return \App::abort(403);
 			}
 		}
+
+		// Make sure we have permission to delete this image without a key
+		if ( $image->canEdit() )
+		{
+			$this->imageService->delete($image);
+
+			if ( $request->ajax() )
+				return response()->json(['success' => true]);
+
+			return response()->redirectToRoute('home');
+		}
+
+		return \App::abort(403);
 	}
 
 	/**
