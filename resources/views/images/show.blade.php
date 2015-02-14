@@ -30,9 +30,11 @@
                                 <i class="fa fa-cog fw"></i>
                             </button>
 
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="image-options">
+                            <ul class="dropdown-menu image-options" role="menu" aria-labelledby="image-options">
                                 <li role="presentation">
-                                    <a href="#" role="menuitem" tabindex="-1"><i class="fa fa-trash-o fa-fw"></i> Delete</a>
+                                    <a href="#" class="delete" role="menuitem" tabindex="-1" data-delete-key="{{ $image->delete_key }}" data-delete-url="{{ route('images.destroy', ['sid' => $image->sid]) }}">
+                                        <i class="fa fa-trash-o fa-fw"></i> Delete
+                                    </a>
                                 </li>
                             </ul>
                         @endif
@@ -53,10 +55,7 @@
     @section('scripts')
         <script>
             $(window).load(function() {
-                deleteResource({
-                    deleteUrl: "{{ route('images.destroy', ['sid' => $image->sid]) }}",
-                    deleteKey: "{{ $deleteKey }}"
-                })
+                pixel.image.deleteResource("{{ route('images.destroy', ['sid' => $image->sid]) }}", "{{ $deleteKey }}");
             });
         </script>
     @stop
@@ -64,11 +63,9 @@
 
 @section('scripts')
     <script>
+        // Center the users viewport on the preview image
         $(window).load(function() {
-            // Center the users viewport on the preview image
-            $('html,body').animate({
-                scrollTop: imagePreview.offset().top - ( $(window).height() - imagePreview.outerHeight(true) ) / 2
-            }, 1025);
+            $(pixel.config["imagePreview"]).centerOn();
         });
     </script>
 @stop
