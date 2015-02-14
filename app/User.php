@@ -31,4 +31,28 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 */
 	protected $hidden = ['password', 'remember_token'];
 
+	/**
+	 * The attributes that should be casted to native types.
+	 *
+	 * @var array
+	 */
+	protected $casts = [
+		'is_admin'     => 'boolean',
+		'is_moderator' => 'boolean'
+	];
+
+	/**
+	 * Is this user an administrator? (Referenced as a function for future proofing)
+	 *
+	 * @return boolean
+	 */
+	public function isAdmin() { return $this->getAttributeValue('is_admin'); }
+
+	/**
+	 * Is this user a moderator? (Referenced as a function for future proofing)
+	 *
+	 * @return boolean
+	 */
+	public function isModerator() { return $this->getAttributeValue('is_moderator'); }
+
 }
