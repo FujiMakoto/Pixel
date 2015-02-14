@@ -15,9 +15,17 @@
 
         // Center the users viewport on the selected element
         debug.info("Centering the users viewport on " + this.prop("tagName"));
-        return $('html,body').animate({
+        var viewport = $('html,body');
+        viewport.animate({
             scrollTop: this.offset().top - ( $(window).height() - this.outerHeight(true) ) / 2
         }, speed);
+
+        // Stop the animation if the user scrolls
+        viewport.bind("scroll mousedown DOMMouseScroll mousewheel keyup", function(e){
+            if ( e.which > 0 || e.type === "mousedown" || e.type === "mousewheel"){
+                viewport.stop().unbind('scroll mousedown DOMMouseScroll mousewheel keyup');
+            }
+        });
     };
 
     /**
