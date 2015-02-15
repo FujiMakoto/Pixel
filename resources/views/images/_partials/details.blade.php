@@ -41,7 +41,7 @@
             </li>
 
             <li class="list-group-item">
-                <span class="badge">Guest</span>
+                <span class="badge">@if($image->user) {{ $image->user["name"] }} @else Guest @endif</span>
                 Created by
             </li>
 

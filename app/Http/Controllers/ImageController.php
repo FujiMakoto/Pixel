@@ -63,6 +63,7 @@ class ImageController extends Controller {
 	{
 		// Create the image
 		$image = $this->imageService->create( $request->file('image') );
+        $image = $this->imageService->getById( $image->id ); // needed for loading relationships
 
 		// Redirect to the newly created image resource
 		if ( $request->ajax() ) {

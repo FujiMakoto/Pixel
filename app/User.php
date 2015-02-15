@@ -42,6 +42,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		'is_moderator' => 'boolean',
 	];
 
+    /**
+     * Image relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function images()
+    {
+        return $this->hasMany('Image');
+    }
+
 	/**
 	 * Is this user an administrator? (Referenced as a function for future proofing)
 	 *

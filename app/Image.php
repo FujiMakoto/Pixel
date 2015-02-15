@@ -23,4 +23,14 @@ class Image extends Model {
         'album_id' => 'integer'
     ];
 
+    /**
+     * User relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo('Pixel\User');
+    }
+
 }

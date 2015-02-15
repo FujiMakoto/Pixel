@@ -18,6 +18,13 @@ class DbRepository extends Repository implements RepositoryContract {
     use AttributeAccessors, Permissions;
 
     /**
+     * Default repository relationships
+     *
+     * @var array
+     */
+    protected static $relationships = ['User'];
+
+    /**
      * Retrieve an image by its string identifier
      *
      * @param $sid
@@ -28,7 +35,7 @@ class DbRepository extends Repository implements RepositoryContract {
     public function getBySid($sid)
     {
         try {
-            $image = ImageModel::whereSid($sid)->firstOrFail()->toArray();
+            $image = ImageModel::with(self::$relationships)->whereSid($sid)->firstOrFail()->toArray();
         } catch (ModelNotFoundException $e) {
             throw new ImageNotFoundException($e->getMessage(), $e->getCode());
         }
@@ -48,7 +55,7 @@ class DbRepository extends Repository implements RepositoryContract {
     public function getById($id)
     {
         try {
-            $image = ImageModel::findOrFail($id)->toArray();
+            $image = ImageModel::with(self::$relationships)->findOrFail($id)->toArray();
         } catch (ModelNotFoundException $e) {
             throw new ImageNotFoundException($e->getMessage(), $e->getCode());
         }
@@ -89,7 +96,7 @@ class DbRepository extends Repository implements RepositoryContract {
         // @todo: Replace with Album repository
         $collection = new Collection();
         $albumId    = ($album instanceof self) ? $album->id : intval($album);
-        $images     = ImageModel::whereUserId($albumId)->get();
+        $images     = ImageModel::with(self::$relationships)->whereUserId($albumId)->get();
 
         foreach ($images as $image)
             $collection->add( new static($image->toArray()) );
@@ -113,7 +120,11 @@ class DbRepository extends Repository implements RepositoryContract {
         // Set up a new Collection instance and get our recent listings
         $collection = new Collection();
         $offset     = $perPage * abs(($page - 1));
-        $images     = ImageModel::orderBy('created_at', 'desc')->skip($offset)->take($perPage)->get();
+        $images     = ImageModel::with(self::$relationships)
+            ->orderBy('created_at', 'desc')
+            ->skip($offset)
+            ->take($perPage)
+            ->get();
 
         // Did we get any results?
         if ( ! $images->count() )
