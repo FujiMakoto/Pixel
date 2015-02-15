@@ -56,18 +56,18 @@ class ImageController extends Controller {
 	 * POST /images
 	 *
 	 * @param ImageUploadRequest $request
-	 * @param Guard              $auth
 	 *
 	 * @return Response
 	 */
-	public function store(ImageUploadRequest $request, Guard $auth)
+	public function store(ImageUploadRequest $request)
 	{
 		// Create the image
 		$image = $this->imageService->create( $request->file('image') );
 
 		// Redirect to the newly created image resource
 		if ( $request->ajax() ) {
-			$response['templates']['imageDetails'] = view('images/_partials/details', ['image' => $image, 'canEdit' => true])->render();
+			$response['templates']['imageDetails'] = view('images/_partials/details', ['image' => $image])->render();
+			$response['templates']['imageToolbar'] = view('images/_partials/toolbar', ['image' => $image])->render();
 			$response['uploadUrl'] = route('images.show', ['sid' => $image->sid]);
 
 			return response()->json($response);

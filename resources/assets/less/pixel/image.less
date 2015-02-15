@@ -4,6 +4,7 @@
 
 .image-preview {
   display: inline-block;
+  position: relative;
   height: auto;
   max-width: 100%;
   padding: 4px;
@@ -12,6 +13,27 @@
   background-color: #ffffff;
   border: 1px solid #dddddd;
   border-radius: @image-preview-border-radius;
+
+  // Image actions
+  .btn-toolbar {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+  }
+
+  .btn {
+    opacity: 0.75;
+
+    &:hover {
+      opacity: 1.0;
+    }
+
+    &.dropdown-toggle {
+      padding-left: @padding-base-horizontal;
+      padding-right: @padding-base-horizontal;
+    }
+  }
+
 }
 
 .image-preview img {
@@ -33,5 +55,9 @@
 
   .input-group {
     margin-bottom: 10px;
+  }
+
+  #details-container {
+    //.transition(opacity 0.35s linear);
   }
 }

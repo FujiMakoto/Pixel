@@ -4,6 +4,7 @@
 pixel.config["imageInput"].fileinput({
     uploadUrl: pixel.config["upload_path"],
     uploadExtraData: {"_token": pixel.config["csrf_token"]},
+    maxFileSize: pixel.config["max_size"],
     browseIcon: '<i class="fa fa-folder-open"></i> ',
     layoutTemplates: {
         icon: '<span class="fa fa-picture-o kv-caption-icon"></span> ',
@@ -25,6 +26,13 @@ pixel.config["imageInput"].fileinput({
     },
     allowedFileTypes: ['image'],
     showPreview: false
+});
+
+/**
+ * bootstrap-fileinput - Validation error
+ */
+pixel.config["imageInput"].on('fileuploaderror', function(event, file, previewId, index, reader) {
+    debug.error('foo');
 });
 
 /**
@@ -96,6 +104,9 @@ pixel.config["imageInput"].on('filebatchuploadsuccess', function(event, data, pr
         var $imageDetails = $(response['templates']['imageDetails']);
         $imageDetails.find("#details-container").addClass('fade');
 
+        // Insert our image toolbar
+        pixel.config["imageToolbar"].html(response['templates']['imageToolbar']);
+
         // Center the users viewport on the preview image
         $(pixel.config["imagePreview"]).centerOn();
 
@@ -103,7 +114,7 @@ pixel.config["imageInput"].on('filebatchuploadsuccess', function(event, data, pr
         pixel.config["uploadForm"].addClass('fade');
 
         // Wait for the transition effect, then insert our replaced HTML and fade back in
-        setTimeout(function() {
+        setTimeout(function() {[]
             pixel.config["uploadForm"].attr('id', 'image-details');
             pixel.config["uploadForm"].html($imageDetails);
             pixel.config["uploadForm"].addClass('in');
