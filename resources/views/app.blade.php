@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Laravel</title>
+	<title>Pixel</title>
 
 	<link href="{{ elixir("css/all.css") }}" rel="stylesheet">
 
@@ -31,12 +31,20 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">Laravel</a>
+				{!! link_to_route('home', 'Pixel', [], ['class' => 'navbar-brand']) !!}
 			</div>
 
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li><a href="/">Home</a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+							<i class="fa fa-upload"></i>&nbsp;&nbsp;Upload <span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu" role="menu">
+							<li>{!! link_to_route('images.create', 'Image') !!}</li>
+							<li><a href="#">Album</a></li>
+						</ul>
+					</li>
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
@@ -45,7 +53,9 @@
 						<li><a href="/auth/register">Register</a></li>
 					@else
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+								{{ Auth::user()->name }} <span class="caret"></span>
+							</a>
 							<ul class="dropdown-menu" role="menu">
 								<li><a href="/auth/logout">Logout</a></li>
 							</ul>
@@ -53,7 +63,6 @@
 					@endif
 				</ul>
 			</div>
-			{{-- /Navigation --}}
 		</div>
 
 		{{-- Header --}}
@@ -97,7 +106,11 @@
 	{{-- Footer --}}
 	<footer class="footer footer-inverse">
 		<div class="container-fluid">
-			<p class="footer-text">Place sticky footer content here.</p>
+			<p class="footer-text text-center">
+                Pixel is an open source image hosting application, built using the
+                {!! link_to('http://laravel.com', 'Laravel', ['target' => '_blank']) !!} PHP framework. Code licensed under
+                {!! link_to('https://github.com/FujiMakoto/Pixel/blob/master/LICENSE', 'MIT', ['target' => '_blank']) !!} License.
+            </p>
 		</div>
 	</footer>
 
@@ -106,12 +119,19 @@
 	<!--<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>-->
 
 	<script>
-		var csrf_token  = "{{ csrf_token() }}";
-		var upload_path = "@yield('upload_path', Request::url())";
-		var home_path   = "{{ route('home') }}";
-		var base_path   = "{{ url('') }}";
-	</script>
+		/**
+		 * Application configuration
+		 */
+		var pixel_config = {
 
+			csrf_token:  "{{ csrf_token() }}",
+			upload_path: "@yield('upload_path', Request::url())",
+			home_path:   "{{ route('home') }}",
+			base_path:   "{{ url('') }}",
+			//max_size:    "{{ config('pixel.upload.max_size') }}"
+
+		}
+	</script>
 	<script src="{{ elixir("js/all.js") }}"></script>
 
 	@yield('scripts')

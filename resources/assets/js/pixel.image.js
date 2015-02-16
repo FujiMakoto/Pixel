@@ -50,7 +50,7 @@ pixel.image = (function(){
     }
 
     /**
-     * Accentuate
+     * Accent page elements using a loaded images RGB color values
      *
      * @param callback
      */
@@ -84,10 +84,28 @@ pixel.image = (function(){
     }
 
     /**
+     * Reset page element changes and clear any loaded images
+     */
+    publicObj.reset = function() {
+
+        debug.info('Pixel image reset triggered');
+        // Reset script attributes
+        options = {};
+        image   = {};
+
+        // Remove custom styling
+        $('head style').remove();
+        pixel.config["headerSecondary"].attr('class', 'header secondary fade');
+
+    }
+
+    /**
      * Process a resource deletion request
      * @public
      *
-     * @param path
+     * @param {string} path
+     * @param {string} [key]
+     * @param {Object} [params]
      */
     publicObj.deleteResource = function(path, key, params) {
 
