@@ -142,6 +142,7 @@ return [
 		 */
 		//'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
 		//'Intervention\Image\ImageServiceProvider',
+        'Greggilbert\Recaptcha\RecaptchaServiceProvider',
 
 		/*
 		 * Application Service Providers...
@@ -204,6 +205,8 @@ return [
 		'View'      => 'Illuminate\Support\Facades\View',
 		'HTML'      => 'Illuminate\Html\HtmlFacade',
 		'Form'      => 'Illuminate\Html\FormFacade',
+
+        'Recaptcha' => 'Greggilbert\Recaptcha\Facades\Recaptcha',
 
 		'Image'     => 'Pixel\Facades\Image',
 		'ColorScheme' => 'Pixel\Facades\ColorScheme'
