@@ -16,6 +16,20 @@ abstract class Repository implements \ArrayAccess, Arrayable, Jsonable, \JsonSer
     protected $attributes = [];
 
     /**
+     * The repositories hidden attributes
+     *
+     * @var array
+     */
+    protected $hiddenAttributes = [];
+
+    /**
+     * The attributes excluded from the repositories JSON form
+     *
+     * @var array
+     */
+    protected $hidden = [];
+
+    /**
      * The attributes that should be mutated to dates
      *
      * @var array
@@ -71,6 +85,16 @@ abstract class Repository implements \ArrayAccess, Arrayable, Jsonable, \JsonSer
     }
 
     /**
+     * Return all attribute types in a single array
+     *
+     * @return array
+     */
+    public function getAllAttributes()
+    {
+        return array_merge($this->attributes, $this->hiddenAttributes);
+    }
+
+    /**
      * Set a given attribute on the repository
      *
      * @param  string  $key
@@ -79,7 +103,10 @@ abstract class Repository implements \ArrayAccess, Arrayable, Jsonable, \JsonSer
      */
     public function setAttribute($key, $value)
     {
-        $this->attributes[$key] = $value;
+        if ( in_array($key, $this->hidden) )
+            $this->hiddenAttributes[$key] = $value;
+        else
+            $this->attributes[$key] = $value;
     }
 
     /**

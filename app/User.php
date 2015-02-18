@@ -17,19 +17,19 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 */
 	protected $table = 'users';
 
-	/**
-	 * The attributes that are mass assignable.
-	 *
-	 * @var array
-	 */
-	protected $fillable = ['name', 'email', 'password'];
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = ['id', 'remember_token', 'created_at', 'updated_at'];
 
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *
 	 * @var array
 	 */
-	protected $hidden = ['password', 'remember_token'];
+	//protected $hidden = ['password', 'remember_token'];
 
 	/**
 	 * The attributes that should be casted to native types.
@@ -40,6 +40,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		'id'           => 'integer',
 		'is_admin'     => 'boolean',
 		'is_moderator' => 'boolean',
+        'active'       => 'boolean'
 	];
 
     /**
@@ -51,19 +52,5 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         return $this->hasMany('Image');
     }
-
-	/**
-	 * Is this user an administrator? (Referenced as a function for future proofing)
-	 *
-	 * @return boolean
-	 */
-	public function isAdmin() { return $this->getAttributeValue('is_admin'); }
-
-	/**
-	 * Is this user a moderator? (Referenced as a function for future proofing)
-	 *
-	 * @return boolean
-	 */
-	public function isModerator() { return $this->getAttributeValue('is_moderator'); }
 
 }
