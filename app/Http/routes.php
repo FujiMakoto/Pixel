@@ -80,6 +80,47 @@ Route::group(['prefix' => 'i'], function ()
 	->where(['sidFile' => '[0-9A-Za-z]{7}\\.[a-z]{3,4}']);
 });
 
+// User routes
+Route::group(['prefix' => 'register'], function()
+{
+    // Registration
+    Route::get('', [
+        'as'   => 'users.auth.register',
+        'uses' => 'UserAuthController@register'
+    ]);
+    Route::post('', [
+        'as'   => 'users.auth.doRegister',
+        'uses' => 'UserAuthController@doRegister'
+    ]);
+
+    // Activation
+    Route::get('activation', [
+        'as'   => 'users.auth.activate',
+        'uses' => 'UserAuthController@activate'
+    ]);
+    Route::match(['GET', 'POST'], 'activate', [
+        'as'   => 'users.auth.doActivate',
+        'uses' => 'UserAuthController@doActivate'
+    ]);
+});
+
+Route::group(['prefix' => 'login'], function ()
+{
+    Route::get('', [
+        'as'   => 'users.auth.login',
+        'uses' => 'UserAuthController@login'
+    ]);
+    Route::post('', [
+        'as'   => 'users.auth.doLogin',
+        'uses' => 'UserAuthController@doLogin'
+    ]);
+});
+
+Route::get('logout', [
+    'as'   => 'users.auth.logout',
+    'uses' => 'UserAuthController@logout'
+]);
+
 // Ajax routes
 Route::group(['prefix' => 'ajax'], function()
 {
