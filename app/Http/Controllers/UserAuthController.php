@@ -30,7 +30,7 @@ class UserAuthController extends Controller {
     {
         $this->auth = $auth;
 
-        $this->middleware('guest', ['except' => ['getLogout', 'activate', 'doActivate']]);
+        $this->middleware('guest', ['except' => ['logout', 'activate', 'doActivate']]);
     }
 
     /**
@@ -40,7 +40,7 @@ class UserAuthController extends Controller {
      */
     public function register()
     {
-        return view('auth.register');
+        return view('users/auth/register');
     }
 
     /**
@@ -66,13 +66,47 @@ class UserAuthController extends Controller {
     }
 
     /**
+     * Cancel a pending registration request
+     *
+     * @param UserActivationRequest $request
+     * @param UserContract          $userService
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function abortRegister(UserActivationRequest $request, UserContract $userService)
+    {
+        $errorResponse = 'The validation code provided is invalid';
+
+        // Fetch the user we are activating
+        try {
+            if ($uid = $request->get('uid')) {
+                $user = $userService->retrieveById($uid);
+            } else {
+                $user = $userService->retrieveByCredentials(['email' => $request->get('email')]);
+            }
+        } catch (UserNotFoundException $e) {
+            return response()->redirectToRoute('users.auth.activate')->withErrors(['code' => $errorResponse]);
+        }
+
+        // Attempt to cancel a pending registration
+        try {
+            $userService->cancelRegistration($user, $request->get('code'));
+        } catch (InvalidActivationCodeException $e) {
+            return response()->redirectToRoute('users.auth.activate')->withErrors(['code' => $errorResponse]);
+        }
+
+        // Registration cancelled successfully, redirect back home
+        return response()->redirectToRoute('home');
+    }
+
+    /**
      * Show the account activation form
      *
      * @return \Illuminate\Http\Response
      */
     public function activate()
     {
-        return view('auth/activate');
+        return view('users/auth/activate');
     }
 
     /**
@@ -120,7 +154,7 @@ class UserAuthController extends Controller {
      */
     public function login()
     {
-        return view('auth.login');
+        return view('users/auth/login');
     }
 
     /**
