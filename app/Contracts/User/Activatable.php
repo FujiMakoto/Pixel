@@ -22,6 +22,13 @@ interface Activatable {
     public function getActivationToken();
 
     /**
+     * Get the activation code for the users account
+     *
+     * @return string
+     */
+    public function getActivationCode();
+
+    /**
      * Set the token value for the activation session
      *
      * @param string $value

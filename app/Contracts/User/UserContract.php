@@ -28,4 +28,11 @@ interface UserContract extends UserProvider {
      */
     public function activate(Authenticatable $user, $code = false);
 
+    /**
+     * Queues an activation e-mail for the specified user
+     *
+     * @param Authenticatable $user
+     */
+    public function sendActivationEmail(Authenticatable $user);
+
 }

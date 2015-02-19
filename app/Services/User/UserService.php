@@ -2,6 +2,7 @@
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
+use Illuminate\Contracts\Mail\Mailer;
 use Pixel\Contracts\User\UserContract;
 use Pixel\Contracts\User\RepositoryContract;
 use Pixel\Exceptions\User\InvalidActivationCodeException;
@@ -75,7 +76,11 @@ class UserService implements UserContract {
             \Session::put('activation_email', $attributes['email']);
         }
 
-        return $this->userRepo->create($attributes);
+        // Create the user and send an activation e-mail
+        $user = $this->userRepo->create($attributes);
+        $this->sendActivationEmail($user);
+
+        return $user;
     }
 
     /**
@@ -104,6 +109,19 @@ class UserService implements UserContract {
         // Do we have a valid activation token?
         if ( empty($sessionToken) || $userToken != $sessionToken )
             throw new InvalidActivationTokenException('No valid activation token was found in the users session');
+    }
+
+    /**
+     * Queues an activation e-mail for the specified user
+     *
+     * @param Authenticatable $user
+     */
+    public function sendActivationEmail(Authenticatable $user)
+    {
+        \Mail::send('emails/activation', ['user' => $user], function($message) use ($user)
+        {
+            $message->to($user->email, $user->name)->subject(config('app.name').' Account Activation');
+        });
     }
 
     /**

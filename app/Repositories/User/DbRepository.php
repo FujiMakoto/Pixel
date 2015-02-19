@@ -173,6 +173,16 @@ class DbRepository extends Repository implements RepositoryContract {
     }
 
     /**
+     * Get the activation code for the users account
+     *
+     * @return string
+     */
+    public function getActivationCode()
+    {
+        return $this->hiddenAttributes[$this->getActivationCodeName()];
+    }
+
+    /**
      * Set the token value for the "remember me" session
      *
      * @param string $value

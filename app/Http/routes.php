@@ -102,6 +102,12 @@ Route::group(['prefix' => 'register'], function()
         'as'   => 'users.auth.doActivate',
         'uses' => 'UserAuthController@doActivate'
     ]);
+
+    // Cancellation
+    Route::match(['GET', 'POST'], 'cancel', [
+        'as'   => 'users.auth.cancelRegistration',
+        'uses' => 'UserAuthController@cancelRegistration'
+    ]);
 });
 
 Route::group(['prefix' => 'login'], function ()

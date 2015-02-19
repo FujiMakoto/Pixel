@@ -15,6 +15,18 @@ return [
 
 	'debug' => env('APP_DEBUG'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Application Name
+    |--------------------------------------------------------------------------
+    |
+    | The public facing name of the web application. This is used in page
+    | titles, e-mails and other miscellaneous areas.
+    |
+    */
+
+    'name' => env('APP_NAME', 'Pixel'),
+
 	/*
 	|--------------------------------------------------------------------------
 	| Application URL
@@ -26,7 +38,19 @@ return [
 	|
 	*/
 
-	'url' => 'http://localhost',
+	'url' => env('APP_URL', 'http://localhost'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Support Email
+    |--------------------------------------------------------------------------
+    |
+    | This primary e-mail address used to handle support and abuse related
+    | inquiries.
+    |
+    */
+
+    'email' => env('APP_EMAIL', 'changeme@localhost'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -156,7 +180,9 @@ return [
 		'Pixel\Providers\Image\ImageServiceProvider',
 		'Pixel\Providers\Image\BackendServiceProvider',
 		'Pixel\Providers\ColorScheme\ColorSchemeServiceProvider',
-		'Pixel\Providers\ColorScheme\BackendServiceProvider'
+		'Pixel\Providers\ColorScheme\BackendServiceProvider',
+        'Pixel\Providers\User\UserServiceProvider',
+        'Pixel\Providers\User\BackendServiceProvider'
 
 	],
 
