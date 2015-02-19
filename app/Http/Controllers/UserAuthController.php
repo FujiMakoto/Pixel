@@ -1,6 +1,8 @@
 <?php namespace Pixel\Http\Controllers;
 
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\PasswordBroker;
+use Illuminate\Http\Request;
 use Pixel\Contracts\User\UserContract;
 use Pixel\Exceptions\User\InvalidActivationCodeException;
 use Pixel\Exceptions\User\InvalidActivationTokenException;
@@ -13,6 +15,7 @@ use Pixel\Http\Requests\UserRegistrationRequest;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Pixel\Http\Requests\UserResetRequest;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class UserAuthController
@@ -117,6 +120,25 @@ class UserAuthController extends Controller {
 
         // Registration cancelled successfully, redirect back home
         return redirect($this->redirectPath);
+    }
+
+    /**
+     * Handle an OAuth login / registration request
+     *
+     * @param String       $driver
+     * @param Request      $request
+     * @param UserContract $userService
+     *
+     * @return Response
+     */
+    public function oauth($driver, Request $request, UserContract $userService)
+    {
+        $oauthResponse = $userService->oauth($driver, $request->get('code'));
+
+        if ($oauthResponse instanceof Response) return $oauthResponse;
+        if ($oauthResponse instanceof Authenticatable) $this->auth->login($oauthResponse);
+
+        return response()->redirectToRoute('home');
     }
 
     /**

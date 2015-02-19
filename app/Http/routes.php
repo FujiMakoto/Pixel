@@ -118,6 +118,12 @@ Route::group(['prefix' => 'login'], function ()
         'uses' => 'UserAuthController@doLogin'
     ]);
 
+    // OAuth login
+    Route::get('oauth/{driver}', [
+        'as'   => 'users.auth.oauth',
+        'uses' => 'UserAuthController@oauth'
+    ]);
+
     // Recover password
     Route::get('recover', [
         'as'   => 'users.auth.recover',

@@ -84,6 +84,30 @@ class DbRepository extends Repository implements RepositoryContract {
     }
 
     /**
+     * Retrieve a user by their OAuth credentials
+     *
+     * @param string $driver
+     * @param int    $id
+     *
+     * @return $this
+     * @throws UserNotFoundException
+     */
+    public function getByOAuthId($driver, $id)
+    {
+        try {
+            $user = UserModel::where('oauth_id', '=', $id)
+                ->where('oauth_driver', '=', $driver)
+                ->firstOrFail()
+                ->toArray();
+        } catch (ModelNotFoundException $e) {
+            throw new UserNotFoundException($e->getMessage(), $e->getCode());
+        }
+        $this->fill($user);
+
+        return $this;
+    }
+
+    /**
      * Retrieve a user by by their unique identifier and "remember me" token
      *
      * @param int     $id

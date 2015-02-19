@@ -45,4 +45,14 @@ interface UserContract extends UserProvider {
      */
     public function sendActivationEmail(Authenticatable $user);
 
+    /**
+     * Log in or create a new account using an OAuth interface
+     *
+     * @param string      $driver
+     * @param string|null $code
+     *
+     * @return \Symfony\Component\HttpFoundation\Response|Authenticatable
+     */
+    public function oauth($driver, $code = null);
+
 }

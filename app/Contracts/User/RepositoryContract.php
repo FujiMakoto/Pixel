@@ -30,6 +30,17 @@ interface RepositoryContract extends Authenticatable, Activatable, CanResetPassw
     public function getById($id);
 
     /**
+     * Retrieve a user by their OAuth credentials
+     *
+     * @param string $driver
+     * @param int    $id
+     *
+     * @return $this
+     * @throws UserNotFoundException
+     */
+    public function getByOAuthId($driver, $id);
+
+    /**
      * Retrieve a user by by their unique identifier and "remember me" token
      *
      * @param int     $id

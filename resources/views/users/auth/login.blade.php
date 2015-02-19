@@ -29,6 +29,16 @@
                             </div>
                         @endif
 
+                        @if ( config('services.github.client_id') )
+                            <div class="form-group">
+                                <div class="col-md-push-4 col-md-6">
+                                    <a href="{{ route('users.auth.oauth', ['driver' => 'github']) }}" class="btn btn-block btn-social btn-github">
+                                        <i class="fa fa-github"></i> Sign in with GitHub
+                                    </a>
+                                </div>
+                            </div>
+                        @endif
+
 						<div class="form-group">
 							<label class="col-md-4 control-label">E-Mail Address</label>
 							<div class="col-md-6">

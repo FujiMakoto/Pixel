@@ -1,8 +1,9 @@
 <?php namespace Pixel\Services\User;
 
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Hashing\Hasher as HasherContract;
-use Illuminate\Contracts\Mail\Mailer;
+use Laravel\Socialite\Contracts\Factory as SocialiteContract;
 use Pixel\Contracts\User\UserContract;
 use Pixel\Contracts\User\RepositoryContract;
 use Pixel\Exceptions\User\InvalidActivationCodeException;
@@ -11,8 +12,23 @@ use Pixel\Exceptions\User\LoginRequiredException;
 use Pixel\Exceptions\User\PasswordRequiredException;
 use Pixel\Exceptions\User\PasswordRequiredExceptions;
 use Pixel\Exceptions\User\UserNotActiveException;
+use Pixel\Exceptions\User\UserNotFoundException;
 
 class UserService implements UserContract {
+
+    /**
+     * OAuth constants
+     */
+    const OAUTH_GITHUB = 'github';
+
+    /**
+     * Valid OAuth drivers
+     *
+     * @var array
+     */
+    protected static $oauthDrivers = [
+        self::OAUTH_GITHUB
+    ];
 
     /**
      * The hasher implementation.
@@ -20,6 +36,16 @@ class UserService implements UserContract {
      * @var HasherContract
      */
     protected $hasher;
+
+    /**
+     * @var SocialiteContract
+     */
+    protected $socialite;
+
+    /**
+     * @var Guard
+     */
+    protected $auth;
 
     /**
      * @var RepositoryContract
@@ -31,11 +57,14 @@ class UserService implements UserContract {
      *
      * @param RepositoryContract $userRepo
      * @param HasherContract     $hasher
+     * @param SocialiteContract  $socialite
      */
-    public function __construct(RepositoryContract $userRepo, HasherContract $hasher)
+    public function __construct(RepositoryContract $userRepo, HasherContract $hasher, SocialiteContract $socialite)
     {
-        $this->userRepo = $userRepo;
-        $this->hasher   = $hasher;
+        $this->userRepo  = $userRepo;
+        $this->hasher    = $hasher;
+        $this->socialite = $socialite;
+        //$this->auth      = $auth;
     }
 
     /**
@@ -43,7 +72,7 @@ class UserService implements UserContract {
      *
      * @param array $attributes
      *
-     * @return $this
+     * @return RepositoryContract
      * @throws LoginRequiredException
      * @throws PasswordRequiredException
      */
@@ -143,6 +172,53 @@ class UserService implements UserContract {
         {
             $message->to($user->email, $user->name)->subject(config('app.name').' Account Activation');
         });
+    }
+
+    /**
+     * A temporary ugly oauth implementation
+     *
+     * @param string      $driver
+     * @param string|null $code
+     *
+     * @return \Symfony\Component\HttpFoundation\Response|Authenticatable
+     */
+    public function oauth($driver, $code = null)
+    {
+        // Make sure we have a valid driver
+        if ( ! in_array($driver, self::$oauthDrivers)) return abort(404);
+
+        // Request authorization
+        if ( ! $code) return $this->socialite->driver($driver)->redirect();
+
+        // Make sure we received a valid e-mail address
+        $OAuthUser = $this->socialite->driver($driver)->user();
+        if ( ! $OAuthUser->getEmail()) {
+            return response()->redirectToRoute('users.auth.login')->withErrors([
+                'oauth' => 'No e-mail was returned from '.$driver.', please make sure your account has one enabled.'
+            ]);
+        }
+
+        // Fetch a user with this OAuth ID, or create a new one if one doesn't exist
+        try
+        {
+            $user = $this->userRepo->getByOAuthId($driver, $OAuthUser->getId());
+        }
+        catch (UserNotFoundException $e)
+        {
+            // @todo: This will fail if a user with this e-mail / display name already exists
+            $name = preg_replace("/[^A-Za-z0-9_-]/", '', $OAuthUser->getNickname());
+            $user = $this->register([
+                'oauth_id'     => $OAuthUser->getId(),
+                'oauth_driver' => $driver,
+                'email'        => $OAuthUser->getEmail(),
+                'password'     => str_random(128),
+                'name'         => $name,
+                'active'       => 1,
+            ]);
+        }
+
+        // Return the user
+        return $user;
     }
 
     /**

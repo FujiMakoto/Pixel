@@ -160,6 +160,7 @@ return [
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Html\HtmlServiceProvider',
+        'Laravel\Socialite\SocialiteServiceProvider',
 
 		/*
 		 * Third Party Service Providers...
@@ -231,6 +232,7 @@ return [
 		'View'      => 'Illuminate\Support\Facades\View',
 		'HTML'      => 'Illuminate\Html\HtmlFacade',
 		'Form'      => 'Illuminate\Html\FormFacade',
+        'Socialize' => 'Laravel\Socialite\Facades\Socialite',
 
         'Recaptcha' => 'Greggilbert\Recaptcha\Facades\Recaptcha',
 
