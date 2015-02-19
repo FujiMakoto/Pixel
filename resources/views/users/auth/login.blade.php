@@ -18,20 +18,34 @@
 						</div>
 					@endif
 
-					<form class="form-horizontal" role="form" method="POST" action="/auth/login">
+					<form class="form-horizontal" role="form" method="POST" action="{{ route('users.auth.doLogin') }}">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+                        @if ($message = \Session::pull('message'))
+                            <div class="form-group">
+                                <div class="col-md-push-4 col-md-6">
+                                    <p class="text-success">{{ $message }}</p>
+                                </div>
+                            </div>
+                        @endif
 
 						<div class="form-group">
 							<label class="col-md-4 control-label">E-Mail Address</label>
 							<div class="col-md-6">
-								<input type="email" class="form-control" name="email" value="{{ old('email') }}">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
+                                    <input type="email" class="form-control" name="email" value="{{ old('email') }}">
+                                </div>
 							</div>
 						</div>
 
 						<div class="form-group">
 							<label class="col-md-4 control-label">Password</label>
 							<div class="col-md-6">
-								<input type="password" class="form-control" name="password">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-lock fa-fw"></i></span>
+                                    <input type="password" class="form-control" name="password">
+                                </div>
 							</div>
 						</div>
 
@@ -51,7 +65,7 @@
 									Login
 								</button>
 
-								<a href="/password/email">Forgot Your Password?</a>
+								<a href="{{ route('users.auth.recover') }}">Forgot Your Password?</a>
 							</div>
 						</div>
 					</form>

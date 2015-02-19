@@ -16,11 +16,6 @@ Route::get('/', [
 	'uses' => 'ImageController@create'
 ]);
 
-Route::controllers([
-	'auth' => 'Auth\AuthController',
-	'password' => 'Auth\PasswordController',
-]);
-
 // Image Resources
 Route::group(['prefix' => 'images'], function ()
 {
@@ -80,7 +75,7 @@ Route::group(['prefix' => 'i'], function ()
 	->where(['sidFile' => '[0-9A-Za-z]{7}\\.[a-z]{3,4}']);
 });
 
-// User routes
+// User Registration routes
 Route::group(['prefix' => 'register'], function()
 {
     // Registration
@@ -110,8 +105,10 @@ Route::group(['prefix' => 'register'], function()
     ]);
 });
 
+// User Authentication routes
 Route::group(['prefix' => 'login'], function ()
 {
+    // Login
     Route::get('', [
         'as'   => 'users.auth.login',
         'uses' => 'UserAuthController@login'
@@ -119,6 +116,26 @@ Route::group(['prefix' => 'login'], function ()
     Route::post('', [
         'as'   => 'users.auth.doLogin',
         'uses' => 'UserAuthController@doLogin'
+    ]);
+
+    // Recover password
+    Route::get('recover', [
+        'as'   => 'users.auth.recover',
+        'uses' => 'UserAuthController@recover'
+    ]);
+    Route::post('recover', [
+        'as'   => 'users.auth.doRecover',
+        'uses' => 'UserAuthController@doRecover'
+    ]);
+
+    // Reset password
+    Route::get('reset/{token}', [
+        'as'   => 'users.auth.reset',
+        'uses' => 'UserAuthController@reset'
+    ]);
+    Route::post('reset', [
+        'as'   => 'users.auth.doReset',
+        'uses' => 'UserAuthController@doReset'
     ]);
 });
 

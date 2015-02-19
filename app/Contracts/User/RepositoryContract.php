@@ -1,8 +1,9 @@
 <?php namespace Pixel\Contracts\User;
 
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\CanResetPassword;
 
-interface RepositoryContract extends Authenticatable, Activatable {
+interface RepositoryContract extends Authenticatable, Activatable, CanResetPassword {
 
     /**
      * Create a new user

@@ -276,4 +276,15 @@ class DbRepository extends Repository implements RepositoryContract {
         return 'activation_code';
     }
 
+    /**
+     * Get the e-mail address where password reset links are sent.
+     *
+     * @return string
+     */
+    public function getEmailForPasswordReset()
+    {
+        return $this->getAttribute('email');
+    }
+
+
 }

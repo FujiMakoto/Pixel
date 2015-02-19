@@ -1,5 +1,6 @@
 <?php namespace Pixel\Http\Controllers;
 
+use Illuminate\Contracts\Auth\PasswordBroker;
 use Pixel\Contracts\User\UserContract;
 use Pixel\Exceptions\User\InvalidActivationCodeException;
 use Pixel\Exceptions\User\InvalidActivationTokenException;
@@ -7,8 +8,11 @@ use Pixel\Exceptions\User\UserNotActiveException;
 use Pixel\Exceptions\User\UserNotFoundException;
 use Pixel\Http\Requests\UserActivationRequest;
 use Pixel\Http\Requests\UserLoginRequest;
+use Pixel\Http\Requests\UserRecoveryRequest;
 use Pixel\Http\Requests\UserRegistrationRequest;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Foundation\Auth\ResetsPasswords;
+use Pixel\Http\Requests\UserResetRequest;
 
 /**
  * Class UserAuthController
@@ -16,19 +20,35 @@ use Illuminate\Contracts\Auth\Guard;
  */
 class UserAuthController extends Controller {
 
+    use ResetsPasswords;
+
     /**
      * @var Guard
      */
     protected $auth;
 
     /**
+     * @var PasswordBrokerdfc
+     */
+    protected $passwords;
+
+    /**
+     * @var string
+     */
+    protected $redirectPath;
+
+    /**
      * Create a new authentication controller instance
      *
-     * @param Guard $auth
+     * @param Guard          $auth
+     * @param PasswordBroker $passwords
      */
-    public function __construct(Guard $auth)
+    public function __construct(Guard $auth, PasswordBroker $passwords)
     {
-        $this->auth = $auth;
+        $this->auth      = $auth;
+        $this->passwords = $passwords;
+
+        $this->redirectPath = route('home');
 
         $this->middleware('guest', ['except' => ['logout', 'activate', 'doActivate']]);
     }
@@ -58,7 +78,7 @@ class UserAuthController extends Controller {
         // If the user was explicitly activated, login and redirect home
         if ( $user->isActive() ) {
             $this->auth->login($user);
-            return redirect()->route('home');
+            return redirect($this->redirectPath);
         }
 
         // Redirect the user to the activation form to complete registration
@@ -96,7 +116,7 @@ class UserAuthController extends Controller {
         }
 
         // Registration cancelled successfully, redirect back home
-        return response()->redirectToRoute('home');
+        return redirect($this->redirectPath);
     }
 
     /**
@@ -144,7 +164,7 @@ class UserAuthController extends Controller {
 
         // The account was activated successfully and the user has a valid activation login token in their session
         $this->auth->login($user);
-        return response()->redirectToRoute('home');
+        return redirect($this->redirectPath);
     }
 
     /**
@@ -172,7 +192,7 @@ class UserAuthController extends Controller {
         try {
             if ($this->auth->attempt($credentials, $request->has('remember')))
             {
-                return redirect()->intended( route('home') );
+                return redirect()->intended($this->redirectPath);
             }
         } catch(UserNotActiveException $e) {
             return redirect()->route('users.auth.activate');
@@ -182,6 +202,85 @@ class UserAuthController extends Controller {
         return redirect( route('users.auth.login') )
             ->withInput( $request->only('email', 'remember') )
             ->withErrors(['email' => 'These credentials do not match our records.']);
+    }
+
+    /**
+     * Display the form to request a password reset link
+     *
+     * @return Response
+     */
+    public function recover()
+    {
+        return view('users/auth/recover');
+    }
+
+    /**
+     * Send a reset link to the given user
+     *
+     * @param UserRecoveryRequest $request
+     *
+     * @return Response
+     */
+    public function doRecover(UserRecoveryRequest $request)
+    {
+        $response = $this->passwords->sendResetLink($request->only('email'), function($message)
+        {
+            $message->subject($this->getEmailSubject());
+        });
+
+        switch ($response)
+        {
+            case PasswordBroker::RESET_LINK_SENT:
+                return redirect()->back()->with('status', trans($response));
+
+            case PasswordBroker::INVALID_USER:
+                return redirect()->back()->withErrors(['email' => trans($response)]);
+        }
+    }
+
+    /**
+     * Display the password reset form for the given token
+     *
+     * @param  string  $token
+     * @return Response
+     */
+    public function reset($token)
+    {
+        return view('users/auth/reset')->with('token', $token);
+    }
+
+    /**
+     * Reset the given user's password.
+     *
+     * @param UserResetRequest $request
+     *
+     * @return Response
+     */
+    public function doReset(UserResetRequest $request)
+    {
+        $credentials = $request->only(
+            'email', 'password', 'password_confirmation', 'token'
+        );
+
+        $response = $this->passwords->reset($credentials, function($user, $password)
+        {
+            $user->password = bcrypt($password);
+
+            $user->save();
+
+            $this->auth->login($user);
+        });
+
+        switch ($response)
+        {
+            case PasswordBroker::PASSWORD_RESET:
+                return redirect($this->redirectPath());
+
+            default:
+                return redirect()->back()
+                                 ->withInput($request->only('email'))
+                                 ->withErrors(['email' => trans($response)]);
+        }
     }
 
     /**
