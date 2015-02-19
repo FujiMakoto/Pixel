@@ -87,8 +87,8 @@ return [
 	*/
 
 	'custom' => [
-		'attribute-name' => [
-			'rule-name' => 'custom-message',
+		'email' => [
+			'required_without' => 'The email field is required',
 		],
 	],
 
@@ -103,6 +103,10 @@ return [
 	|
 	*/
 
-	'attributes' => [],
+	'attributes' => [
+        'g-recaptcha-response' => 'reCAPTCHA',
+        'name' => 'display name',
+        'code' => 'activation code'
+    ],
 
 ];

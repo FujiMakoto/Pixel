@@ -16,11 +16,6 @@ Route::get('/', [
 	'uses' => 'ImageController@create'
 ]);
 
-Route::controllers([
-	'auth' => 'Auth\AuthController',
-	'password' => 'Auth\PasswordController',
-]);
-
 // Image Resources
 Route::group(['prefix' => 'images'], function ()
 {
@@ -79,6 +74,81 @@ Route::group(['prefix' => 'i'], function ()
 	])
 	->where(['sidFile' => '[0-9A-Za-z]{7}\\.[a-z]{3,4}']);
 });
+
+// User Registration routes
+Route::group(['prefix' => 'register'], function()
+{
+    // Registration
+    Route::get('', [
+        'as'   => 'users.auth.register',
+        'uses' => 'UserAuthController@register'
+    ]);
+    Route::post('', [
+        'as'   => 'users.auth.doRegister',
+        'uses' => 'UserAuthController@doRegister'
+    ]);
+
+    // Activation
+    Route::get('activation', [
+        'as'   => 'users.auth.activate',
+        'uses' => 'UserAuthController@activate'
+    ]);
+    Route::match(['GET', 'POST'], 'activate', [
+        'as'   => 'users.auth.doActivate',
+        'uses' => 'UserAuthController@doActivate'
+    ]);
+
+    // Cancellation
+    Route::match(['GET', 'POST'], 'cancel', [
+        'as'   => 'users.auth.abortRegister',
+        'uses' => 'UserAuthController@abortRegister'
+    ]);
+});
+
+// User Authentication routes
+Route::group(['prefix' => 'login'], function ()
+{
+    // Login
+    Route::get('', [
+        'as'   => 'users.auth.login',
+        'uses' => 'UserAuthController@login'
+    ]);
+    Route::post('', [
+        'as'   => 'users.auth.doLogin',
+        'uses' => 'UserAuthController@doLogin'
+    ]);
+
+    // OAuth login
+    Route::get('oauth/{driver}', [
+        'as'   => 'users.auth.oauth',
+        'uses' => 'UserAuthController@oauth'
+    ]);
+
+    // Recover password
+    Route::get('recover', [
+        'as'   => 'users.auth.recover',
+        'uses' => 'UserAuthController@recover'
+    ]);
+    Route::post('recover', [
+        'as'   => 'users.auth.doRecover',
+        'uses' => 'UserAuthController@doRecover'
+    ]);
+
+    // Reset password
+    Route::get('reset/{token}', [
+        'as'   => 'users.auth.reset',
+        'uses' => 'UserAuthController@reset'
+    ]);
+    Route::post('reset', [
+        'as'   => 'users.auth.doReset',
+        'uses' => 'UserAuthController@doReset'
+    ]);
+});
+
+Route::get('logout', [
+    'as'   => 'users.auth.logout',
+    'uses' => 'UserAuthController@logout'
+]);
 
 // Ajax routes
 Route::group(['prefix' => 'ajax'], function()
