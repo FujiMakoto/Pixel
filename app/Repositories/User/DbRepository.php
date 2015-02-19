@@ -47,6 +47,14 @@ class DbRepository extends Repository implements RepositoryContract {
     }
 
     /**
+     * Terminate the specified user
+     */
+    public function destroy()
+    {
+        UserModel::destroy($this->getAuthIdentifier());
+    }
+
+    /**
      * Update a users attributes
      */
     public function save()
@@ -215,8 +223,8 @@ class DbRepository extends Repository implements RepositoryContract {
      */
     public function validateActivationCode($code)
     {
-        // Make sure we actually have an activation code
-        if ( empty($this->hiddenAttributes[$this->getActivationCodeName()]) )
+        // Make sure we are actually an inactive user
+        if ( $this->attributes['active'] || empty($this->hiddenAttributes[$this->getActivationTokenName()]) )
             return false;
 
         return ($this->hiddenAttributes[$this->getActivationCodeName()] == $code);

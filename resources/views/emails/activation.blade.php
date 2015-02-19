@@ -33,7 +33,7 @@
 @section('unsubscribe')
     <td align="center">
         <p>Didn't request this account?
-            <a href="{{ route('users.auth.cancelRegistration', ['uid' => $user->id, 'code' => $user->getActivationCode()]) }}">
+            <a href="{{ route('users.auth.abortRegister', ['uid' => $user->id, 'code' => $user->getActivationCode()]) }}">
                 <unsubscribe>Cancel Registration</unsubscribe>
             </a>.
         </p>

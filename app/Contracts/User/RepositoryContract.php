@@ -14,6 +14,11 @@ interface RepositoryContract extends Authenticatable, Activatable {
     public function create(array $attributes);
 
     /**
+     * Terminate the specified user
+     */
+    public function destroy();
+
+    /**
      * Retrieve a user by their unique identifier
      *
      * @param int $id

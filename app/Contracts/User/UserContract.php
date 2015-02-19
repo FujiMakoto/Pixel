@@ -18,10 +18,20 @@ interface UserContract extends UserProvider {
     public function register(array $attributes);
 
     /**
+     * Delete a pending registration
+     *
+     * @param Authenticatable $user
+     * @param string|bool     $code
+     *
+     * @throws InvalidActivationCodeException
+     */
+    public function cancelRegistration(Authenticatable $user, $code = false);
+
+    /**
      * Activate a users account
      *
      * @param Authenticatable $user
-     * @param bool|string     $code
+     * @param string|bool     $code
      *
      * @throws InvalidActivationCodeException
      * @throws InvalidActivationTokenException

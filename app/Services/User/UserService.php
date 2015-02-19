@@ -84,10 +84,31 @@ class UserService implements UserContract {
     }
 
     /**
+     * Delete a pending registration
+     *
+     * @param Authenticatable $user
+     * @param string|bool     $code
+     *
+     * @throws InvalidActivationCodeException
+     */
+    public function cancelRegistration(Authenticatable $user, $code = false)
+    {
+        // Validate our activation code
+        if ( ($code !== false) && ( ! $user->validateActivationCode($code)) )
+            throw new InvalidActivationCodeException('Invalid activation code supplied when cancelling registration');
+
+        // Clear our session attributes (if we have any)
+        \Session::remove('activation_token');
+        \Session::remove('activation_email');
+
+        $user->destroy();
+    }
+
+    /**
      * Activate a users account
      *
      * @param Authenticatable $user
-     * @param bool|string     $code
+     * @param string|bool     $code
      *
      * @throws InvalidActivationCodeException
      * @throws InvalidActivationTokenException
@@ -96,7 +117,7 @@ class UserService implements UserContract {
     {
         // Validate our activation code
         if ( ($code !== false) && ( ! $user->validateActivationCode($code)) )
-            throw new InvalidActivationCodeException('Invalid activation code supplied');
+            throw new InvalidActivationCodeException('Invalid activation code supplied when activating');
 
         // Activate the user
         $userToken = $user->getActivationToken();
