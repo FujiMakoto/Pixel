@@ -60,6 +60,50 @@ Route::group(['prefix' => 'images'], function ()
 	]);
 });
 
+// Album Resources
+Route::group(['prefix' => 'albums'], function()
+{
+    Route::pattern('sid', '[0-9A-Za-z]{7}');
+
+    Route::get('/', [
+        'as'   => 'albums.index',
+        'uses' => 'AlbumController@index'
+    ]);
+
+    Route::get('create', [
+        'as'   => 'albums.create',
+        'uses' => 'AlbumController@create'
+    ]);
+    Route::post('/', [
+        'as'   => 'albums.store',
+        'uses' => 'AlbumController@store'
+    ]);
+
+    Route::get('{sid}/upload', [
+        'as'   => 'albums.upload',
+        'uses' => 'AlbumController@upload'
+    ]);
+
+    Route::get('{sid}', [
+        'as'   => 'albums.show',
+        'uses' => 'AlbumController@show'
+    ]);
+
+    /*Route::get('{sid}/edit', [
+        'as'   => 'albums.edit',
+        'uses' => 'AlbumController@edit'
+    ]);
+    Route::put('{sid}', [
+        'as'   => 'albums.update',
+        'uses' => 'AlbumController@update'
+    ]);*/
+
+    Route::delete('{sid}', [
+        'as'   => 'albums.destroy',
+        'uses' => 'AlbumController@destroy'
+    ]);
+});
+
 // Short URL's
 Route::group(['prefix' => 'i'], function ()
 {
