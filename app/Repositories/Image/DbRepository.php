@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\Paginator;
 use Pixel\Contracts\Image\RepositoryContract;
+use Pixel\Contracts\Album\RepositoryContract as AlbumRepositoryContract;
 use Pixel\Exceptions\Image\ImageNotFoundException;
 use Pixel\Repositories\Repository;
 use Pixel\Repositories\Collection;
@@ -95,8 +96,8 @@ class DbRepository extends Repository implements RepositoryContract {
     {
         // @todo: Replace with Album repository
         $collection = new Collection();
-        $albumId    = ($album instanceof self) ? $album->id : intval($album);
-        $images     = ImageModel::with(self::$relationships)->whereUserId($albumId)->get();
+        $albumId    = ($album instanceof AlbumRepositoryContract) ? $album->id : intval($album);
+        $images     = ImageModel::whereAlbumId($albumId)->get();
 
         foreach ($images as $image)
             $collection->add( new static($image->toArray()) );

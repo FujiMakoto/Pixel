@@ -100,7 +100,7 @@ abstract class ImageService implements ImageContract {
      */
     public function getByAlbum($album)
     {
-        //
+        return $this->imageRepo->getByAlbum($album);
     }
 
     /**
@@ -139,6 +139,15 @@ abstract class ImageService implements ImageContract {
         $params['user_id']         = \Auth::check() ? \Auth::id() : 0;
         $params['upload_ip']       = \Request::getClientIp();
         $params['upload_uagent']   = \Request::server('HTTP_USER_AGENT');
+
+        // Perform some sanity checks if we're uploading to an album
+        if ( isset($params['album_id']) ) {
+            $album = \Album::getById($params['album_id']);
+
+            // Make sure we have upload access to this album
+            if ( ! $album->canEdit() )
+                unset($params['album_id']);
+        }
 
         // Concatenate our parameters
         $params = array_merge($imageData, $dominantColor, $params);
