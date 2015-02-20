@@ -27,7 +27,11 @@ class ImageUploadRequest extends Request
         $rules[] = 'valid_image';
 
         return [
-            'image' => $rules
+            'image'    => $rules,
+            'album_id' => [
+                'integer',
+                'between:1,4294967295'
+            ]
         ];
     }
 
