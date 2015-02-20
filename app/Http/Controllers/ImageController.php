@@ -69,6 +69,8 @@ class ImageController extends Controller {
 		if ( $request->ajax() ) {
 			$response['templates']['imageDetails'] = view('images/_partials/details', ['image' => $image])->render();
 			$response['templates']['imageToolbar'] = view('images/_partials/toolbar', ['image' => $image])->render();
+            $response['header']['text']    = $image->name;
+            $response['header']['subtext'] = $image->md5sum;
 			$response['uploadUrl'] = route('images.show', ['sid' => $image->sid]);
 
 			return response()->json($response);
