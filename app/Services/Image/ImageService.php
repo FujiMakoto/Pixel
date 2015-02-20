@@ -147,6 +147,8 @@ abstract class ImageService implements ImageContract {
             // Make sure we have upload access to this album
             if ( ! $album->canEdit() )
                 unset($params['album_id']);
+        } else {
+            unset($params['album_id']); // album_id is possibly set but null
         }
 
         // Concatenate our parameters
