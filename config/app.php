@@ -180,6 +180,8 @@ return [
 		'Pixel\Providers\ValidatorServiceProvider',
 		'Pixel\Providers\Image\ImageServiceProvider',
 		'Pixel\Providers\Image\BackendServiceProvider',
+        'Pixel\Providers\Album\AlbumServiceProvider',
+        'Pixel\Providers\Album\BackendServiceProvider',
 		'Pixel\Providers\ColorScheme\ColorSchemeServiceProvider',
 		'Pixel\Providers\ColorScheme\BackendServiceProvider',
         'Pixel\Providers\User\UserServiceProvider',
@@ -237,6 +239,7 @@ return [
         'Recaptcha' => 'Greggilbert\Recaptcha\Facades\Recaptcha',
 
 		'Image'     => 'Pixel\Facades\Image',
+        'Album'     => 'Pixel\Facades\Album',
 		'ColorScheme' => 'Pixel\Facades\ColorScheme'
 
 	],

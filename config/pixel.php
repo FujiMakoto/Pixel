@@ -69,8 +69,8 @@ return [
         'thumbnail' => [
 
             'quality' => 87,
-            'width'   => 171,
-            'height'  => 180,
+            'width'   => 300,
+            'height'  => 225,
             'method'  => 'crop',
             'preserve_format' => false
 

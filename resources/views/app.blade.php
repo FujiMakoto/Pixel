@@ -42,7 +42,7 @@
 						</a>
 						<ul class="dropdown-menu" role="menu">
 							<li>{!! link_to_route('images.create', 'Image') !!}</li>
-							<li><a href="#">Album</a></li>
+							<li>{!! link_to_route('albums.create', 'Album') !!}</li>
 						</ul>
 					</li>
 				</ul>
@@ -72,12 +72,11 @@
 				<div class="container">
 					<div class="row">
 						<div style="margin-top: 35px;" class="col-md-12">
-							<h4>Single Image Uploader</h4>
+							<h4>@yield('header-text', config('app.name'))</h4>
 						</div>
 
 						<div class="col-md-12 subtext">
-							<span>Want to create an album instead?</span>
-							<a href="sign-up.html">Click here</a>
+							<span>@yield('header-subtext')</span>
 						</div>
 					</div>
 				</div>

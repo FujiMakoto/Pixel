@@ -62,7 +62,7 @@ class ImageController extends Controller {
 	public function store(ImageUploadRequest $request)
 	{
 		// Create the image
-		$image = $this->imageService->create( $request->file('image') );
+		$image = $this->imageService->create( $request->file('image'), $request->only('album_id') );
         $image = $this->imageService->getById( $image->id ); // needed for loading relationships
 
 		// Redirect to the newly created image resource
