@@ -1,5 +1,8 @@
 @extends('app')
 
+@section('header-text') Register a new account @endsection
+@section('header-subtext') Fill in your desired account information below @endsection
+
 @section('content')
 <div class="container-fluid">
 	<div class="row">

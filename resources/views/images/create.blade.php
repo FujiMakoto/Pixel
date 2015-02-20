@@ -1,5 +1,8 @@
 @extends('app')
 
+@section('header-text') Upload a new image @endsection
+@section('header-subtext') Drag and drop the image you wish to upload below @endsection
+
 @section('content')
     <div class="container upload-container">
         <div class="preview-container">

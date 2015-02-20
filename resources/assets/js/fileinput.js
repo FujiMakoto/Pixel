@@ -52,12 +52,10 @@ pixel.config["imageInput"].on('fileloaded', function(event, file, previewId, ind
                 return false;
             }
 
-            // Center the users viewport on the preview image
-            $(pixel.config["imagePreview"]).centerOn();
-
             // Load the color pallet for this image and apply accent styling
             pixel.image.load(pixel.config["imagePreview"][0]);
             pixel.image.accentuate(function () {
+                $(pixel.config["imagePreview"]).centerOn();
                 pixel.config["imageInput"].fileinput('upload');
             })
         })
@@ -103,6 +101,10 @@ pixel.config["imageInput"].on('filebatchuploadsuccess', function(event, data, pr
         // Tweak our image details template
         var $imageDetails = $(response['templates']['imageDetails']);
         $imageDetails.find("#details-container").addClass('fade');
+
+        // Replace our header text
+        pixel.config["secHeaderText"].html(response['header']['text']);
+        pixel.config["secHeaderSubtext"].html(response['header']['subtext']);
 
         // Insert our image toolbar
         pixel.config["imageToolbar"].html(response['templates']['imageToolbar']);

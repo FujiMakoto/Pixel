@@ -1,5 +1,8 @@
 @extends('app')
 
+@section('header-text') Account recovery @endsection
+@section('header-subtext') Fill in your accounts registered e-mail address below @endsection
+
 @section('content')
 <div class="container-fluid">
 	<div class="row">

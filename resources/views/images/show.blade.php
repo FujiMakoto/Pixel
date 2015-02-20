@@ -7,6 +7,10 @@
     @include('images/_partials/accentuation')
 @stop
 
+{{-- Header Text --}}
+@section('header-text'){{ $image->name }}@endsection
+@section('header-subtext'){{ $image->md5sum }}@endsection
+
 {{-- Page Content --}}
 @section('content')
     <div class="container image-show-container">

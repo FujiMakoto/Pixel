@@ -1,5 +1,8 @@
 @extends('app')
 
+@section('header-text') Log into your account @endsection
+@section('header-subtext') Enter in your account information below @endsection
+
 @section('content')
 <div class="container-fluid">
 	<div class="row">

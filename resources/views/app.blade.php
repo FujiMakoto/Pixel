@@ -72,11 +72,11 @@
 				<div class="container">
 					<div class="row">
 						<div style="margin-top: 35px;" class="col-md-12">
-							<h4>@yield('header-text', config('app.name'))</h4>
+							<h4 id="header-text">@yield('header-text', config('app.name'))</h4>
 						</div>
 
 						<div class="col-md-12 subtext">
-							<span>@yield('header-subtext')</span>
+							<span id="header-subtext">@yield('header-subtext')</span>
 						</div>
 					</div>
 				</div>
@@ -87,12 +87,11 @@
 				<div class="container">
 					<div class="row">
 						<div style="margin-top: 35px;" class="col-md-12">
-							<h4>Single Image Uploader</h4>
+							<h4 id="secondary-header-text">@yield('header-text', config('app.name'))</h4>
 						</div>
 
 						<div class="col-md-12 subtext">
-							<span>Want to create an album instead?</span>
-							<a href="sign-up.html">Click here</a>
+							<span id="secondary-header-subtext">@yield('header-subtext')</span>
 						</div>
 					</div>
 				</div>

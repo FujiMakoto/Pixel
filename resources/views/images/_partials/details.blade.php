@@ -12,7 +12,7 @@
                value="{{ route('images.shortDownload', ['sidFile' => $image->getSidFilename()]) }}">
     </div>
 
-    @if ($image->canEdit())
+    @if ($image->canEdit() && $image->delete_key)
         <hr>
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-trash-o fa-fw"></i></span>
