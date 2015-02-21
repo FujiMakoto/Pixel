@@ -64,7 +64,7 @@ class UserAuthController extends Controller {
 
         // If the user was explicitly activated, login and redirect home
         if ( $user->isActive() ) {
-            Auth::login($user);
+            \Auth::login($user);
             return redirect($this->redirectPath);
         }
 
@@ -120,7 +120,7 @@ class UserAuthController extends Controller {
         $oauthResponse = $userService->oauth($driver, $request->get('code'));
 
         if ($oauthResponse instanceof Response) return $oauthResponse;
-        if ($oauthResponse instanceof Authenticatable) Auth::login($oauthResponse);
+        if ($oauthResponse instanceof Authenticatable) \Auth::login($oauthResponse);
 
         return response()->redirectToRoute('home');
     }
@@ -169,7 +169,7 @@ class UserAuthController extends Controller {
         }
 
         // The account was activated successfully and the user has a valid activation login token in their session
-        Auth::login($user);
+        \Auth::login($user);
         return redirect($this->redirectPath);
     }
 
@@ -196,7 +196,7 @@ class UserAuthController extends Controller {
 
         // Attempt authentication. If the users account has not been activated, redirect to the activation page
         try {
-            if (Auth::attempt($credentials, $request->has('remember')))
+            if (\Auth::attempt($credentials, $request->has('remember')))
             {
                 return redirect()->intended($this->redirectPath);
             }
@@ -274,7 +274,7 @@ class UserAuthController extends Controller {
 
             $user->save();
 
-            Auth::login($user);
+            \Auth::login($user);
         });
 
         switch ($response)
@@ -296,7 +296,7 @@ class UserAuthController extends Controller {
      */
     public function logout()
     {
-        Auth::logout();
+        \Auth::logout();
 
         return redirect('/');
     }
