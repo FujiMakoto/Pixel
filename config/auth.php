@@ -11,11 +11,11 @@ return [
 	| This driver manages the retrieval and authentication of the users
 	| attempting to get access to protected areas of your application.
 	|
-	| Supported: "database", "eloquent"
+	| Supported: "database", "eloquent", "pixel"
 	|
 	*/
 
-	'driver' => 'eloquent',
+	'driver' => 'pixel',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -59,7 +59,7 @@ return [
 	*/
 
 	'password' => [
-		'email' => 'emails.password',
+		'email' => 'emails/user/recovery',
 		'table' => 'password_resets',
 		'expire' => 60,
 	],

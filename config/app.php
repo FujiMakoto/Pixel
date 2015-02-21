@@ -15,6 +15,18 @@ return [
 
 	'debug' => env('APP_DEBUG'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Application Name
+    |--------------------------------------------------------------------------
+    |
+    | The public facing name of the web application. This is used in page
+    | titles, e-mails and other miscellaneous areas.
+    |
+    */
+
+    'name' => env('APP_NAME', 'Pixel'),
+
 	/*
 	|--------------------------------------------------------------------------
 	| Application URL
@@ -26,7 +38,19 @@ return [
 	|
 	*/
 
-	'url' => 'http://localhost',
+	'url' => env('APP_URL', 'http://localhost'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Support Email
+    |--------------------------------------------------------------------------
+    |
+    | This primary e-mail address used to handle support and abuse related
+    | inquiries.
+    |
+    */
+
+    'email' => env('APP_EMAIL', 'changeme@localhost'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -135,6 +159,15 @@ return [
 		'Illuminate\Translation\TranslationServiceProvider',
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
+		'Illuminate\Html\HtmlServiceProvider',
+        'Laravel\Socialite\SocialiteServiceProvider',
+
+		/*
+		 * Third Party Service Providers...
+		 */
+		//'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
+		//'Intervention\Image\ImageServiceProvider',
+        'Greggilbert\Recaptcha\RecaptchaServiceProvider',
 
 		/*
 		 * Application Service Providers...
@@ -144,6 +177,15 @@ return [
 		'Pixel\Providers\ConfigServiceProvider',
 		'Pixel\Providers\EventServiceProvider',
 		'Pixel\Providers\RouteServiceProvider',
+		'Pixel\Providers\ValidatorServiceProvider',
+		'Pixel\Providers\Image\ImageServiceProvider',
+		'Pixel\Providers\Image\BackendServiceProvider',
+        'Pixel\Providers\Album\AlbumServiceProvider',
+        'Pixel\Providers\Album\BackendServiceProvider',
+		'Pixel\Providers\ColorScheme\ColorSchemeServiceProvider',
+		'Pixel\Providers\ColorScheme\BackendServiceProvider',
+        'Pixel\Providers\User\UserServiceProvider',
+        'Pixel\Providers\User\BackendServiceProvider'
 
 	],
 
@@ -190,6 +232,15 @@ return [
 		'URL'       => 'Illuminate\Support\Facades\URL',
 		'Validator' => 'Illuminate\Support\Facades\Validator',
 		'View'      => 'Illuminate\Support\Facades\View',
+		'HTML'      => 'Illuminate\Html\HtmlFacade',
+		'Form'      => 'Illuminate\Html\FormFacade',
+        'Socialize' => 'Laravel\Socialite\Facades\Socialite',
+
+        'Recaptcha' => 'Greggilbert\Recaptcha\Facades\Recaptcha',
+
+		'Image'     => 'Pixel\Facades\Image',
+        'Album'     => 'Pixel\Facades\Album',
+		'ColorScheme' => 'Pixel\Facades\ColorScheme'
 
 	],
 
