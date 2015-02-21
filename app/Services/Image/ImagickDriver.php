@@ -42,11 +42,11 @@ class ImagickDriver extends ImageService {
     public function createScaledImages(RepositoryContract $image)
     {
         // Create the preview image
-        $previewConfig = config('pixel.scaling.preview');
+        $previewConfig = config('image.scaling.preview');
         $this->scaleImage($image::PREVIEW, $previewConfig, $image);
 
         // Create the thumbnail image
-        $thumbnailConfig = config('pixel.scaling.thumbnail');
+        $thumbnailConfig = config('image.scaling.thumbnail');
         $this->scaleImage($image::THUMBNAIL, $thumbnailConfig, $image);
 
         return true;

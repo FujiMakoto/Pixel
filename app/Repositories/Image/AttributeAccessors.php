@@ -53,12 +53,12 @@ trait AttributeAccessors {
 
         switch ($scale) {
             case self::PREVIEW:
-                return config('pixel.scaling.preview.preserve_format')
+                return config('image.scaling.preview.preserve_format')
                     ? $type
                     : 'jpg';
 
             case self::THUMBNAIL:
-                return config('pixel.scaling.thumbnail.preserve_format')
+                return config('image.scaling.thumbnail.preserve_format')
                     ? $type
                     : 'jpg';
 
@@ -150,10 +150,10 @@ trait AttributeAccessors {
         // Define the width / height attributes
         $imageWidth      = $this->attributes['width'];
         $imageHeight     = $this->attributes['height'];
-        $previewWidth    = config('pixel.scaling.preview.width');
-        $previewHeight   = config('pixel.scaling.preview.height');
-        $thumbnailWidth  = config('pixel.scaling.thumbnail.width');
-        $thumbnailHeight = config('pixel.scaling.thumbnail.height');
+        $previewWidth    = config('image.scaling.preview.width');
+        $previewHeight   = config('image.scaling.preview.height');
+        $thumbnailWidth  = config('image.scaling.thumbnail.width');
+        $thumbnailHeight = config('image.scaling.thumbnail.height');
 
         // Return the preview image only if our original has a scaled preview
         if ($scale == self::PREVIEW)
