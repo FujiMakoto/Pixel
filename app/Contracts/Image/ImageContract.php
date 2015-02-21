@@ -145,6 +145,15 @@ interface ImageContract {
     public function downloadResponse(RepositoryContract $image, $scale = null, $disposition = 'inline');
 
     /**
+     * Retrieve the cache headers for this image resource
+     *
+     * @param RepositoryContract $image
+     *
+     * @return ResponseHeaderBag
+     */
+    public function getCacheHeaders(RepositoryContract $image);
+
+    /**
      * Create scaled versions of an image resource
      *
      * @param RepositoryContract $image

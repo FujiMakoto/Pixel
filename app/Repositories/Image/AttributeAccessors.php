@@ -94,6 +94,32 @@ trait AttributeAccessors {
     }
 
     /**
+     * Get the maximum cache lifetime for this resource in seconds
+     *
+     * @return int
+     */
+    public function getMaxAge()
+    {
+        // Get the default max days
+        $defaultDays = config('image.cache-control.max-age');
+        $maxAge      = $defaultDays * 86400;
+
+        // Is this image scheduled to expire at a specific date?
+        if ( $expires = $this->getAttribute('expires') )
+        {
+            // In how many days will this image expire?
+            $carbon  = \Carbon\Carbon::now();
+            $expires = $this->asDateTime($expires);
+
+            // Will the image expire before our default maximum cache lifetime?
+            if ( $expires->lt($carbon->addDays($defaultDays)) )
+                $maxAge = $expires->diffInSeconds($carbon->now());
+        }
+
+        return $maxAge;
+    }
+
+    /**
      * Get the raw URL to the image resource
      *
      * @param null|string $scale

@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use ColorThief\ColorThief;
 use Carbon\Carbon;
 use SplFileObject;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * Class ImageService
@@ -306,7 +307,7 @@ abstract class ImageService implements ImageContract {
         if ( $fileSystem == 'local' ) {
             $filePath   = config('filesystems.disks.local.root').'/'.$image->getRealPath($scale);
             $fileObject = new SplFileObject($filePath);
-            return response()->download($fileObject, $image->name, [], $disposition);
+            return response()->download($fileObject, $image->name, $this->getCacheHeaders($image)->all(), $disposition);
         }
 
         // Amazon S3 response
@@ -321,6 +322,32 @@ abstract class ImageService implements ImageContract {
         }
 
         throw new UnsupportedFilesystemException("{$fileSystem} is not a supported Filesystem");
+    }
+
+    /**
+     * Retrieve the cache headers for this image resource
+     *
+     * @param RepositoryContract $image
+     *
+     * @return ResponseHeaderBag
+     */
+    public function getCacheHeaders(RepositoryContract $image)
+    {
+        // Set up the header bad and get our images max cache lifetime
+        $headers = new ResponseHeaderBag();
+        $maxAge  = $image->getMaxAge();
+
+        // Define our cache control and expires headers
+        $headers->addCacheControlDirective('max-age', $maxAge);
+        if ( config('image.cache-control.no-transform') )
+            $headers->addCacheControlDirective('no-transform', true);
+        $headers->addCacheControlDirective('public', true);
+        $headers->add(['Expires' => Carbon::now()->addSeconds($maxAge)->toRfc1123String()]);
+
+        // Set the Last-Modified header according to our updated_at attribute
+        $headers->add(['Last-Modified' => $image->updated_at->toRfc1123String()]);
+
+        return $headers;
     }
 
     /**
