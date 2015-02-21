@@ -7,6 +7,7 @@ use Pixel\Exceptions\Image\ImageNotFoundException;
 use Pixel\Exceptions\Image\UnsupportedFilesystemException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use ColorThief\ColorThief;
+use Carbon\Carbon;
 use SplFileObject;
 
 /**
@@ -77,6 +78,19 @@ abstract class ImageService implements ImageContract {
     public function getById($id)
     {
         return $this->imageRepo->getById($id);
+    }
+
+    /**
+     * Fetch all image entries matching the specified md5sum
+     *
+     * @param string      $md5sum
+     * @param Carbon|null $date
+     *
+     * @return Collection
+     */
+    public function getByMd5($md5sum, $date = null)
+    {
+        return $this->imageRepo->getByMd5($md5sum, $date);
     }
 
     /**
@@ -225,10 +239,15 @@ abstract class ImageService implements ImageContract {
         $paths['preview']   = $image->getRealPath($image::PREVIEW);
         $paths['thumbnail'] = $image->getRealPath($image::THUMBNAIL);
 
+        // Make sure this is our only remaining entry for this image
+        $copies = $this->getByMd5($image->md5sum, $image->created_at);
+
         // Loop through our paths and delete the files
-        foreach ($paths as $path) {
-            if ( $this->filesystem->exists($path) )
-                $this->filesystem->delete($path);
+        if ($copies->count() < 2) {
+            foreach ($paths as $path) {
+                if ($this->filesystem->exists($path))
+                    $this->filesystem->delete($path);
+            }
         }
 
         // Delete the image from our backend

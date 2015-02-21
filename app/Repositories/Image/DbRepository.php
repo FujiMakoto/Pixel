@@ -66,6 +66,32 @@ class DbRepository extends Repository implements RepositoryContract {
     }
 
     /**
+     * Fetch all image entries matching the specified md5sum
+     *
+     * @param string      $md5sum
+     * @param Carbon|null $date
+     *
+     * @return Collection
+     */
+    public function getByMd5($md5sum, $date = null)
+    {
+        $images = ImageModel::where('md5sum', '=', $md5sum);
+
+        // Do we only want images created on a specific date?
+        if ($date instanceof Carbon)
+            $images->where('created_at', '>', $date->startOfDay());
+
+        // Fetch our images and add them to a Collection
+        $collection = new Collection();
+        $images = $images->get();
+
+        foreach ($images as $image)
+            $collection->add( new static($image->toArray()) );
+
+        return $collection;
+    }
+
+    /**
      * Retrieve images posted by the specified user
      *
      * @param $user

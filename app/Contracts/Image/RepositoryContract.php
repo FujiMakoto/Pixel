@@ -2,6 +2,7 @@
 
 use Illuminate\Contracts\Auth\Guard;
 use Pixel\Services\Image\Collection;
+use Carbon\Carbon;
 
 interface RepositoryContract {
 
@@ -31,6 +32,16 @@ interface RepositoryContract {
      * @throws ImageNotFoundException
      */
     public function getById($id);
+
+    /**
+     * Fetch all image entries matching the specified md5sum
+     *
+     * @param string      $md5sum
+     * @param Carbon|null $date
+     *
+     * @return Collection
+     */
+    public function getByMd5($md5sum, $date = null);
 
     /**
      * Retrieve images posted by the specified user
