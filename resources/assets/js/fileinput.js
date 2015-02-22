@@ -4,7 +4,7 @@
 pixel.config["imageInput"].fileinput({
     uploadUrl: pixel.config["upload_path"],
     uploadExtraData: {"_token": pixel.config["csrf_token"]},
-    maxFileSize: pixel.config["max_size"],
+    //maxFileSize: pixel.config["max_size"],
     browseIcon: '<i class="fa fa-folder-open"></i> ',
     layoutTemplates: {
         icon: '<span class="fa fa-picture-o kv-caption-icon"></span> ',
@@ -32,7 +32,7 @@ pixel.config["imageInput"].fileinput({
  * bootstrap-fileinput - Validation error
  */
 pixel.config["imageInput"].on('fileuploaderror', function(event, file, previewId, index, reader) {
-    debug.error('foo');
+    debug.error('Image file input validation error');
 });
 
 /**

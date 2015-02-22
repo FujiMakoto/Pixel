@@ -44,6 +44,7 @@ elixir(function(mix) {
         'resources/assets/js/pixel.js',
         'resources/assets/js/pixel.*.js',
         'resources/assets/js/fileinput.js',
+        'resources/assets/js/dropzone.js',
         'resources/assets/js/app.js'
     ], '', './')
     mix.version(["css/all.css", "js/all.js"]);

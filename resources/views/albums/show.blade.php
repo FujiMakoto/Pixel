@@ -1,7 +1,14 @@
 @extends('app')
 
 @section('header-text'){{ $album->name }}@endsection
-@section('header-subtext'){{ $album->description }}@endsection
+@section('header-subtext')
+    @unless(empty($album->description)){{ $album->description }}
+    @else{{ $album->images()->count() }} images
+    @endunless
+@endsection
+
+{{-- Color Scheme --}}
+@section('color-scheme'){{ $album->getColorScheme() }}@stop
 
 @section('content')
     <div class="container album-show-container">

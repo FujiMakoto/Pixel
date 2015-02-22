@@ -126,7 +126,7 @@
 			upload_path: "@yield('upload_path', Request::url())",
 			home_path:   "{{ route('home') }}",
 			base_path:   "{{ url('') }}",
-			//max_size:    "{{ config('pixel.upload.max_size') }}"
+			max_size:    "{{ config('image.upload.max_size') }}"
 
 		}
 	</script>

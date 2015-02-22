@@ -22,24 +22,3 @@
 @stop
 
 @section('upload_path'){{ link_to_route('images.store') }}@stop
-
-@section('scripts')
-    <script>
-        Dropzone.options.albumUploadForm = {
-            init: function() {
-                this.on("sending", function() {
-                    $(".upload-container .continue").addClass('disabled');
-                });
-                this.on("queuecomplete", function() {
-                    $(".upload-container .continue").removeClass('disabled');
-                });
-            },
-
-            paramName: "image", // The name that will be used to transfer the file
-            maxFilesize: {{ config('pixel.upload.max_size') / 1000 }}, // MB
-            maxFiles: 50,
-            acceptedFiles: 'image/*',
-            addRemoveLinks: true
-        };
-    </script>
-@endsection
