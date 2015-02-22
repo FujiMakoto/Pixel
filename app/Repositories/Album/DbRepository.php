@@ -123,7 +123,18 @@ class DbRepository extends Repository implements RepositoryContract {
      */
     public function getColorScheme($sampleLimit = 25)
     {
-        // TODO: Implement getColorScheme() method.
+        // Fetch some image samples from the album
+        $images = $this->images()->take($sampleLimit);
+
+        // Loop through each image and get its associated color scheme
+        $schemes = [];
+        foreach ($images as $image) {
+            $name = $image->getColorScheme();
+            if ( isset($schemes[$name]) ) { $schemes[$name]++; } else { $schemes[$name] = 1; };
+        }
+
+        // Find the most frequently used color scheme and return it
+        return array_search(max($schemes), $schemes);
     }
 
     /**

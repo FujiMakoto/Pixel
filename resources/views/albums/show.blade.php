@@ -7,6 +7,9 @@
     @endunless
 @endsection
 
+{{-- Color Scheme --}}
+@section('color-scheme'){{ $album->getColorScheme() }}@stop
+
 @section('content')
     <div class="container album-show-container">
         <div id="links" class="row">
