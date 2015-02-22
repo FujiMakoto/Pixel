@@ -39,13 +39,22 @@ return [
 	| may even configure multiple disks of the same driver. Defaults have
 	| been setup for each driver as an example of the required options.
 	|
+	| Sendfile allows you to process file download requests in PHP, while
+	| still having your web server handle the actual task of serving the file
+	| itself. For more information, just Google "<<Your Web Server>> XSendfile"
+	|
 	*/
 
 	'disks' => [
 
 		'local' => [
 			'driver' => 'local',
-			'root'   => storage_path().'/app',
+			'root'   => env('FS_LOCAL_ROOT', storage_path().'/app'),
+            'sendfile' => [
+                'enabled' => env('FS_LOCAL_SENDFILE', false),
+                'server'  => env('FS_LOCAL_SENDFILE-SERVER', 'nginx'), // accepts nginx, apache or lighttpd
+                'path'    => env('FS_LOCAL_SENDFILE-PATH', '/internal')
+            ],
 		],
 
 		's3' => [

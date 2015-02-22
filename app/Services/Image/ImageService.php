@@ -4,18 +4,38 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 use Pixel\Contracts\Image\ImageContract;
 use Pixel\Contracts\Image\RepositoryContract;
 use Pixel\Exceptions\Image\ImageNotFoundException;
+use Pixel\Exceptions\Image\InvalidConfigurationException;
 use Pixel\Exceptions\Image\UnsupportedFilesystemException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Guzzle\Http\Mimetypes;
 use ColorThief\ColorThief;
 use Carbon\Carbon;
 use SplFileObject;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * Class ImageService
  * @package Pixel\Services\Image
  */
 abstract class ImageService implements ImageContract {
+
+    /**
+     * XSendfile header constants
+     */
+    const XSENDFILE_NGINX    = 'X-Accel-Redirect';
+    const XSENDFILE_APACHE   = 'X-Sendfile';
+    const XSENDFILE_LIGHTTPD = 'X-LIGHTTPD-send-file';
+
+    /**
+     * XSendfile server headers
+     *
+     * @var array
+     */
+    protected $xsendfileHeaders = [
+        'nginx'    => self::XSENDFILE_NGINX,
+        'apache'   => self::XSENDFILE_APACHE,
+        'lighttpd' => self::XSENDFILE_LIGHTTPD
+    ];
 
     /**
      * @var ImageRepository
@@ -301,13 +321,27 @@ abstract class ImageService implements ImageContract {
     public function downloadResponse(RepositoryContract $image, $scale = null, $disposition = 'inline')
     {
         $fileSystem = config('filesystems.default');
-        // @todo: Sendfile response
 
         // Standard filesystem response
         if ( $fileSystem == 'local' ) {
-            $filePath   = config('filesystems.disks.local.root').'/'.$image->getRealPath($scale);
+            // Get our file path and cache headers
+            $filePath     = config('filesystems.disks.local.root').'/'.$image->getRealPath($scale);
+            $cacheHeaders = $this->getCacheHeaders($image);
+
+            // Are we utilizing XSendfile?
+            if ( config('filesystems.disks.local.sendfile.enabled') )
+            {
+                // Get our sendfile headers and merge them with our cache headers
+                $xsendfileHeaders = $this->getSendfileHeaders($image, $scale);
+                $headers = array_merge($xsendfileHeaders->all(), $cacheHeaders->all()); // cacheHeaders must be last
+
+                // Return our XSendfile response
+                return response(null, 200, $headers);
+            }
+
+            // Return a standard PHP download response
             $fileObject = new SplFileObject($filePath);
-            return response()->download($fileObject, $image->name, $this->getCacheHeaders($image)->all(), $disposition);
+            return response()->download($fileObject, $image->name, $cacheHeaders->all(), $disposition);
         }
 
         // Amazon S3 response
@@ -333,7 +367,7 @@ abstract class ImageService implements ImageContract {
      */
     public function getCacheHeaders(RepositoryContract $image)
     {
-        // Set up the header bad and get our images max cache lifetime
+        // Set up the header bag and get our images max cache lifetime
         $headers = new ResponseHeaderBag();
         $maxAge  = $image->getMaxAge();
 
@@ -348,6 +382,37 @@ abstract class ImageService implements ImageContract {
         $headers->add(['Last-Modified' => $image->updated_at->toRfc1123String()]);
 
         return $headers;
+    }
+
+    /**
+     * Retrieve the XSendfile headers for this image resource
+     *
+     * @param RepositoryContract $image
+     * @param string|null        $scale
+     *
+     * @return ResponseHeaderBag
+     * @throws InvalidConfigurationException
+     */
+    public function getSendfileHeaders(RepositoryContract $image, $scale = null)
+    {
+        // Set up the header bag and get our sendfile configuration
+        $config    = config('filesystems.disks.local.sendfile');
+        $imagePath = $image->getRealPath($scale);
+
+        // Make sure we have a valid server configured
+        if ( ! isset($this->xsendfileHeaders[ $config['server'] ]) )
+            throw new InvalidConfigurationException("\"{$config['server']}\" is not a supported XSendfile server");
+
+        // Define our header key and value attributes
+        $headerKey   = $this->xsendfileHeaders[ $config['server'] ];
+        $headerValue = $config['path'].'/'.$imagePath;
+        $contentType = Mimetypes::getInstance()->fromFilename($imagePath);
+
+        // Set and return our XSendfile header
+        return new ResponseHeaderBag([
+            $headerKey     => $headerValue,
+            'Content-Type' => $contentType
+        ]);
     }
 
     /**
