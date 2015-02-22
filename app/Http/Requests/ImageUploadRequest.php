@@ -16,11 +16,11 @@ class ImageUploadRequest extends Request
         $rules[] = 'required';
 
         // Mime types
-        if ( $mimeTypes = config('pixel.upload.mimes') )
+        if ( $mimeTypes = config('image.upload.mimes') )
             $rules[] = 'mimes:' . implode(',', $mimeTypes);
 
         // Maximum filesize
-        if ( $maxFilesize = config('pixel.upload.max_size') )
+        if ( $maxFilesize = config('image.upload.max_size') )
             $rules[] = 'max:' . $maxFilesize;
 
         // Valid image file

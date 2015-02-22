@@ -128,6 +128,13 @@ interface RepositoryContract {
     public function getSidFilename($scale = null);
 
     /**
+     * Get the maximum cache lifetime for this resource in seconds
+     *
+     * @return int
+     */
+    public function getMaxAge();
+
+    /**
      * Get the color scheme for this image
      *
      * @return string

@@ -28,7 +28,7 @@ class ImageValidator extends Validator {
 
         # There are still situations in which the above will fail. If we're using Imagick, we can perform
         # further validation on the uploaded image.
-        if ( config('pixel.driver') == 'imagick' )
+        if ( config('image.driver') == 'imagick' )
         {
             try {
                 new \Imagick( $value->getRealPath() );

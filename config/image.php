@@ -76,6 +76,30 @@ return [
 
         ],
 
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cache Control Settings
+    |--------------------------------------------------------------------------
+    |
+    | Defines the cache control headers sent with local image transfers.
+    |
+    | max-age is the default cache lifetime for images in days. If an image is
+    |   set to expire at a specific date, the max-age value will not exceed this
+    |   date, no matter what setting you use here.
+    |
+    | no-transform makes sure any CDN's or reverse proxies you use will not
+    |   attempt to "optimize" any images you deliver. Set this to FALSE if you
+    |   DO want optimization to be performed.
+    |
+    */
+
+    'cache-control' => [
+
+        'max-age'      => 30,
+        'no-transform' => true,
+
     ]
 
 ];
