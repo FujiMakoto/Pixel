@@ -118,7 +118,7 @@ pixel.image = (function(){
         options.successText  = params.successText  || 'Your image has been successfully deleted.',
         options.cancelTitle  = params.cancelTitle  || 'Canceled',
         options.cancelText   = params.cancelText   || 'Your image has not been deleted.',
-        options.deleteUrl    = params.deleteUrl    || document.URL,
+        options.deleteUrl    = path                || document.URL,
         options.deleteKey    = key                 || null
 
         // Prompt the user for confirmation
