@@ -36,7 +36,7 @@ class DbRepository extends Repository implements RepositoryContract {
     public function getBySid($sid)
     {
         try {
-            $image = ImageModel::with(self::$relationships)->whereSid($sid)->firstOrFail()->toArray();
+            $image = ImageModel::whereSid($sid)->firstOrFail()->toArray();
         } catch (ModelNotFoundException $e) {
             throw new ImageNotFoundException($e->getMessage(), $e->getCode());
         }

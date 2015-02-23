@@ -106,8 +106,8 @@ pixel.config["imageInput"].on('filebatchuploadsuccess', function(event, data, pr
         pixel.config["secHeaderText"].html(response['header']['text']);
         pixel.config["secHeaderSubtext"].html(response['header']['subtext']);
 
-        // Insert our image toolbar
-        pixel.config["imageToolbar"].html(response['templates']['imageToolbar']);
+        // Insert our image toolbars
+        pixel.config["toolbars"].html(response['templates']['toolbars']);
 
         // Center the users viewport on the preview image
         $(pixel.config["imagePreview"]).centerOn();

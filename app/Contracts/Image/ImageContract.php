@@ -95,14 +95,15 @@ interface ImageContract {
     public function create(UploadedFile $image, array $params = []);
 
     /**
-     * Crop an image to the specified dimensions
+     * Crop an image to the specified coordinates
      *
-     * @param $image
-     * @param $params
+     * @param RepositoryContract $image
+     * @param array              $coords
      *
-     * @return mixed
+     * @return RepositoryContract
+     * @throws UnreadableImageException
      */
-    public function crop($image, $params);
+    public function crop(RepositoryContract $image, array $coords);
 
     /**
      * Convert an image to the specified filetype

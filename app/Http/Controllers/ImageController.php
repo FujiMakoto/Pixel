@@ -1,6 +1,7 @@
 <?php namespace Pixel\Http\Controllers;
 
 use Illuminate\Contracts\Auth\Guard;
+use Pixel\Http\Requests\ImageCropRequest;
 use Pixel\Http\Requests\ImageUploadRequest;
 use Pixel\Http\Requests\ImageDestroyRequest;
 use Pixel\Contracts\Image\ImageContract;
@@ -68,7 +69,7 @@ class ImageController extends Controller {
 		// Redirect to the newly created image resource
 		if ( $request->ajax() ) {
 			$response['templates']['imageDetails'] = view('images/_partials/details', ['image' => $image])->render();
-			$response['templates']['imageToolbar'] = view('images/_partials/toolbar', ['image' => $image])->render();
+			$response['templates']['toolbars']     = view('images/_partials/toolbars', ['image' => $image])->render();
             $response['header']['text']    = $image->name;
             $response['header']['subtext'] = $image->md5sum;
 			$response['uploadUrl'] = route('images.show', ['sid' => $image->sid]);
@@ -211,5 +212,23 @@ class ImageController extends Controller {
 	{
 		return response()->redirectToRoute('images.show', ['sid' => $sid], 301);
 	}
+
+    /**
+     * Process a crop request for the specified image
+     *
+     * @param string           $sid
+     * @param ImageCropRequest $request
+     *
+     * @return Response
+     */
+    public function crop($sid, ImageCropRequest $request)
+    {
+        // Fetch the requested image and drop it
+        $image = $this->imageService->get($sid);
+        $this->imageService->crop($image, $request->get('coords'));
+
+        // Refresh the page (@todo Ajaxify)
+        return response()->redirectToRoute('images.show', ['sid' => $sid]);
+    }
 
 }

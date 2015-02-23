@@ -7,16 +7,46 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class ImagickDriver extends ImageService {
 
     /**
-     * Crop an image to the specified dimensions
+     * Crop an image to the specified coordinates
      *
-     * @param $image
-     * @param $params
+     * @param RepositoryContract $image
+     * @param array              $coords
      *
-     * @return mixed
+     * @return RepositoryContract
+     * @throws UnreadableImageException
      */
-    public function crop($image, $params)
+    public function crop(RepositoryContract $image, array $coords)
     {
-        // TODO: Implement crop() method.
+        // Get the file contents
+        $filePath     = $image->getRealPath($image::ORIGINAL);
+        $fileContents = $this->filesystem->get($filePath);
+
+        // Instantiate a new Imagick instance
+        try {
+            $imagick = new \Imagick();
+            $imagick->readImageBlob($fileContents);
+        } catch (\ImagickException $e) {
+            throw new UnreadableImageException($e->getMessage(), $e->getCode());
+        }
+
+        // Crop the image to our new dimensions
+        $imagick->setImageCompressionQuality(90);
+        $imagick->setSamplingFactors([1,1,1]);
+        $imagick->setImageInterlaceScheme(\Imagick::INTERLACE_LINE);
+        $imagick->cropImage($coords['w'], $coords['h'], $coords['x'], $coords['y']);
+        $this->filesystem->put($filePath, $imagick->getImageBlob());
+
+        // Update our resource dimensions and filesize
+        $image->width  = $imagick->getImageWidth();
+        $image->height = $imagick->getImageHeight();
+        $image->size   = $imagick->getImageLength();
+        $image->save();
+
+        // Regenerate our scaled versions of this image
+        $this->createScaledImages($image);
+
+        // Return our updated image repository
+        return $image;
     }
 
     /**
