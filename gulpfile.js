@@ -45,10 +45,10 @@ elixir(function(mix) {
         'bower_components/jcrop/js/jquery.Jcrop.js',
         'resources/assets/js/pixel.js',
         'resources/assets/js/pixel.*.js',
+        'resources/assets/js/app.js',
         'resources/assets/js/fileinput.js',
         'resources/assets/js/dropzone.js',
-        'resources/assets/js/image-toolbars.js',
-        'resources/assets/js/app.js'
+        'resources/assets/js/image-toolbars.js'
     ], '', './')
     mix.version(["css/all.css", "js/all.js"]);
     mix.copy('bower_components/font-awesome/fonts/**', 'public/build/fonts/');

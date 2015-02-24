@@ -33,9 +33,9 @@ pixel.cropper = (function(){
     var jcrop_api = {};
 
     /**
-     * Load and process a new image
+     * Load a new cropper instance
      *
-     * @param element
+     * @param {external:jQuery} element
      * @param [callback]
      *
      * @returns {{}}
@@ -48,7 +48,7 @@ pixel.cropper = (function(){
         var trueHeight = element.data('trueHeight');
         debug.debug("Cropper trueWidth: " + trueWidth + ", trueHeight: " + trueHeight);
 
-        pixel.config["imagePreview"].Jcrop({
+        pixel.select["imagePreview"].Jcrop({
             //aspectRatio: trueWidth / trueHeight,
             trueSize: [trueWidth, trueHeight],
             onSelect: this.setCoords
@@ -62,7 +62,7 @@ pixel.cropper = (function(){
     }
 
     /**
-     * Accent page elements using a loaded images RGB color values
+     * Destroy a loaded cropper instance
      *
      * @param [callback]
      */
@@ -109,12 +109,10 @@ pixel.cropper = (function(){
             // The crop request returned successful
             if (isSuccess) {
                 debug.info('Image crop request successful');
-                if (callback && typeof(callback) === "function") { callback(); }
-                debug.info('Reloading the page');
-                window.location.reload();
+                if (callback && typeof(callback) === "function") { callback(true); }
             } else {
                 debug.error('Image crop request failed');
-                if (callback && typeof(callback) === "function") { callback(); }
+                if (callback && typeof(callback) === "function") { callback(false); }
                 swal({
                     title: 'Error',
                     text: jqXHR.responseJSON || 'An unknown error occurred while processing your request',

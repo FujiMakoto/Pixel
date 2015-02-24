@@ -13,6 +13,7 @@ pixel.image = (function(){
 
     /**
      * Global module options
+     * @private
      *
      * @type {{}}
      */
@@ -20,6 +21,7 @@ pixel.image = (function(){
 
     /**
      * Loaded image
+     * @private
      *
      * @type {{}}
      */
@@ -27,6 +29,7 @@ pixel.image = (function(){
 
     /**
      * Load and process a new image
+     * @public
      *
      * @param inputImage
      *
@@ -51,8 +54,9 @@ pixel.image = (function(){
 
     /**
      * Accent page elements using a loaded images RGB color values
+     * @public
      *
-     * @param callback
+     * @param [callback]
      */
     publicObj.accentuate = function(callback) {
 
@@ -67,8 +71,8 @@ pixel.image = (function(){
 
                 // Switch our header
                 if (data.colorScheme && data.colorScheme.name) {
-                    pixel.config["headerSecondary"].addClass(data.colorScheme.name);
-                    pixel.config["headerSecondary"].addClass('in');
+                    pixel.select["headerSecondary"].addClass(data.colorScheme.name);
+                    pixel.select["headerSecondary"].addClass('in');
                 }
 
                 // Success callback
@@ -85,6 +89,7 @@ pixel.image = (function(){
 
     /**
      * Reset page element changes and clear any loaded images
+     * @public
      */
     publicObj.reset = function() {
 
@@ -95,7 +100,7 @@ pixel.image = (function(){
 
         // Remove custom styling
         $('head style').remove();
-        pixel.config["headerSecondary"].attr('class', 'header secondary fade');
+        pixel.select["headerSecondary"].attr('class', 'header secondary fade');
 
     }
 
@@ -171,6 +176,8 @@ pixel.image = (function(){
     /**
      * Prompt the user for confirmation of a delete request. Callback for {@link pixel#deleteResource}
      * @private
+     *
+     * @param callback
      */
     function _deletePrompt(callback) {
 
@@ -195,6 +202,8 @@ pixel.image = (function(){
     /**
      * Process and callback the results of an Ajax delete request. Callback for {@link pixel#deleteResource}
      * @private
+     *
+     * @param callback
      */
     function _deleteRequest(callback) {
 

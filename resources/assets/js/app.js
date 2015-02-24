@@ -1,4 +1,7 @@
-// Application debug level
+// Initialize our application's Javascript library
+pixel.init();
+
+// Application debug level (@todo: Configurable)
 debug.setLevel(5);
 
 // Reveal hidden input text on focus

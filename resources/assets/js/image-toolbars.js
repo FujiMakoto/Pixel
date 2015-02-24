@@ -1,5 +1,5 @@
 // Image button toolbar - fade on preview hover
-pixel.config["previewContainer"].hover(function () {
+pixel.select["previewContainer"].hover(function () {
     debug.debug('Image preview hover event triggered');
     var imageOptionsToolbar = $(".btn-toolbar", this);
 
@@ -36,13 +36,13 @@ $("body").on("click", ".image-options .crop", function(e) {
     var $this = $(this);
 
     // @todo: This is a bit of a hacky fix for a bug I don't fully understand yet
-    pixel.config["previewContainer"].css('display', 'inherit');
+    pixel.select["previewContainer"].css('display', 'inherit');
 
     // Load the cropper insance
     pixel.cropper.load($this, function() {
-        pixel.config["previewContainer"].removeAttr('style');
-        pixel.config["cropToolbar"].toggleClass('hide');
-        pixel.config["imageToolbar"].toggleClass('hide');
+        pixel.select["previewContainer"].removeAttr('style');
+        pixel.select["cropToolbar"].toggleClass('hide');
+        pixel.select["imageToolbar"].toggleClass('hide');
     });
 
 })
@@ -51,8 +51,8 @@ $("body").on("click", ".image-options .crop", function(e) {
 $("body").on("click", "#crop-toolbar .cancel", function(e) {
     debug.info('Image cropping cancelled');
     pixel.cropper.destroy(function() {
-        pixel.config["cropToolbar"].toggleClass('hide');
-        pixel.config["imageToolbar"].toggleClass('hide');
+        pixel.select["cropToolbar"].toggleClass('hide');
+        pixel.select["imageToolbar"].toggleClass('hide');
     });
 })
 
@@ -63,9 +63,15 @@ $("body").on("click", "#crop-toolbar .submit", function(e) {
     var cropUrl = $this.data('cropUrl');
     $this.attr("disabled", true);
 
-    pixel.cropper.crop(cropUrl, {}, function() {
+    pixel.cropper.crop(cropUrl, {}, function(isSuccess) {
         $this.attr("disabled", false);
-        pixel.config["cropToolbar"].toggleClass('hide');
-        pixel.config["imageToolbar"].toggleClass('hide');
+        pixel.select["cropToolbar"].toggleClass('hide');
+        pixel.select["imageToolbar"].toggleClass('hide');
+
+        // @todo: Ajaxify
+        if (isSuccess) {
+            debug.info('Reloading the page');
+            window.location.reload();
+        }
     });
 })
