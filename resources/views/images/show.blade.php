@@ -49,7 +49,7 @@
     <script>
         // Center the users viewport on the preview image
         $(window).load(function() {
-            $(pixel.config["imagePreview"]).centerOn();
+            pixel.select["imagePreview"].centerOn();
         });
     </script>
 @stop
