@@ -53,6 +53,10 @@ Route::group(['prefix' => 'images'], function ()
 		'as'   => 'images.update',
 		'uses' => 'ImageController@update'
 	]);
+    Route::post('{sid}/crop', [
+        'as'   => 'images.crop',
+        'uses' => 'ImageController@crop'
+    ]);
 
 	Route::delete('{sid}', [
 		'as'   => 'images.destroy',

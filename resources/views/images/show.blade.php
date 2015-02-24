@@ -19,8 +19,10 @@
             <div class="image-preview">
                 {{-- Preview Image --}}
                 {!! HTML::image($image->getUrl($image::PREVIEW), $image->name, ['id' => 'preview']) !!}
-                <div id="image-toolbar">
-                    @include('images/_partials/toolbar')
+
+                {{-- Toolbars --}}
+                <div id="toolbar-container">
+                    @include('images/_partials/toolbars')
                 </div>
             </div>
         </div>

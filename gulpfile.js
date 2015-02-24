@@ -26,6 +26,7 @@ elixir(function(mix) {
         'bower_components/blueimp-gallery/css/blueimp-gallery.css',
         'bower_components/blueimp-gallery/css/blueimp-gallery-indicator.css',
         'bower_components/blueimp-bootstrap-image-gallery/css/bootstrap-image-gallery.css',
+        'bower_components/jcrop/css/jquery.Jcrop.css',
         'public/css/app.css'
     ], '', './'),
     mix.scripts([
@@ -41,14 +42,17 @@ elixir(function(mix) {
         'bower_components/blueimp-gallery/js/blueimp-gallery-indicator.js',
         'bower_components/blueimp-gallery/js/jquery.blueimp-gallery.js',
         'bower_components/blueimp-bootstrap-image-gallery/js/bootstrap-image-gallery.js',
+        'bower_components/jcrop/js/jquery.Jcrop.js',
         'resources/assets/js/pixel.js',
         'resources/assets/js/pixel.*.js',
+        'resources/assets/js/app.js',
         'resources/assets/js/fileinput.js',
         'resources/assets/js/dropzone.js',
-        'resources/assets/js/app.js'
+        'resources/assets/js/image-toolbars.js'
     ], '', './')
     mix.version(["css/all.css", "js/all.js"]);
     mix.copy('bower_components/font-awesome/fonts/**', 'public/build/fonts/');
     mix.copy('bower_components/bootstrap/fonts/**', 'public/build/fonts/');
+    mix.copy('bower_components/jcrop/css/Jcrop.gif', 'public/build/css/Jcrop.gif');
     mix.copy('resources/assets/images/', 'public/build/images/');
 });
